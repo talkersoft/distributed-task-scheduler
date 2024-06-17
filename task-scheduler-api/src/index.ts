@@ -2,6 +2,12 @@ import "reflect-metadata";
 import express from "express";
 import { AppDataSource } from "./data-source";
 import router from "./routes";
+import { setupSwagger } from "./swagger";
+
+// Get the current timestamp
+const getCurrentTimestamp = () => new Date().toISOString();
+
+console.log(`Starting server at ${getCurrentTimestamp()}`);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,8 +15,27 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use("/api", router);
 
-AppDataSource.initialize().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-}).catch(error => console.log(error));
+// Setup Swagger
+setupSwagger(app);
+
+const RETRY_INTERVAL = 2000; // 2 seconds
+const MAX_RETRIES = 10;
+
+async function initializeApp(retries = 0) {
+    try {
+        await AppDataSource.initialize();
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+            console.log(`Swagger UI available at ${process.env.BASE_URL}/api-docs`);
+        });
+    } catch (error) {
+        if (retries < MAX_RETRIES) {
+            console.log(`Error connecting to the database, retrying in ${RETRY_INTERVAL / 1000} seconds... (${retries + 1}/${MAX_RETRIES})`);
+            setTimeout(() => initializeApp(retries + 1), RETRY_INTERVAL);
+        } else {
+            console.error('Failed to connect to the database after maximum retries:', error);
+        }
+    }
+}
+
+initializeApp();

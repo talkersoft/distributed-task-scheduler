@@ -1,31 +1,62 @@
-import { Request, Response } from "express";
-import { AppDataSource } from "./data-source";
-import { TaskType } from "./entity/TaskType";
-import { Task } from "./entity/Task";
+import { Request, Response } from 'express';
+import { AppDataSource } from './data-source';
+import { TaskType } from './entity/TaskType';
+import { Task } from './entity/Task';
+
+const isErrorWithMessage = (error: unknown): error is { message: string } => {
+    return (
+        typeof error === 'object' &&
+        error !== null &&
+        'message' in error &&
+        typeof (error as { message: string }).message === 'string'
+    );
+};
 
 export const getTaskTypes = async (req: Request, res: Response) => {
-    const taskTypeRepository = AppDataSource.getRepository(TaskType);
-    const taskTypes = await taskTypeRepository.find();
-    res.json(taskTypes);
+    try {
+        const taskTypeRepository = AppDataSource.getRepository(TaskType);
+        const taskTypes = await taskTypeRepository.find();
+        res.json(taskTypes);
+    } catch (error) {
+        console.error('Error fetching task types:', error);
+        const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
+        res.status(500).json({ message: 'Internal Server Error', error: errorMessage });
+    }
 };
 
 export const createTask = async (req: Request, res: Response) => {
     const { task_type_id, cron_expression, task_details, next_execution, is_recurring } = req.body;
-    const taskRepository = AppDataSource.getRepository(Task);
+    try {
+        const taskRepository = AppDataSource.getRepository(Task);
 
-    const task = new Task();
-    task.task_type_id = task_type_id;
-    task.cron_expression = cron_expression;
-    task.task_details = task_details;
-    task.next_execution = new Date(next_execution);
-    task.is_recurring = is_recurring;
+        const task = new Task();
+        task.task_type_id = task_type_id;
+        task.cron_expression = cron_expression;
+        task.task_details = task_details;
+        task.next_execution = new Date(next_execution);
+        task.is_recurring = is_recurring;
 
-    await taskRepository.save(task);
-    res.status(201).json(task);
+        await taskRepository.save(task);
+        res.status(201).json(task);
+    } catch (error) {
+        console.error('Error creating task:', error);
+        const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
+        res.status(500).json({ message: 'Internal Server Error', error: errorMessage });
+    }
 };
 
 export const getTasks = async (req: Request, res: Response) => {
-    const taskRepository = AppDataSource.getRepository(Task);
-    const tasks = await taskRepository.find();
-    res.json(tasks);
+    try {
+        const taskRepository = AppDataSource.getRepository(Task);
+        const tasks = await taskRepository.find();
+        res.json(tasks);
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
+        res.status(500).json({ message: 'Internal Server Error', error: errorMessage });
+    }
+};
+
+export const healthCheck = (req: Request, res: Response) => {
+    res.status(200).json({ message: 'Healthy' });
 };
