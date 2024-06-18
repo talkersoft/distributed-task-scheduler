@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 # Copy the root package.json and yarn.lock files
 COPY package.json yarn.lock ./
 # Copy the package.json files of the workspaces
-COPY task-scheduler-api/package.json task-scheduler-api/
+COPY task-scheduler/package.json task-scheduler/
 COPY task-scheduler-entities/package.json task-scheduler-entities/
 # Install dependencies including workspaces
 RUN yarn install
@@ -17,10 +17,10 @@ COPY . .
 
 # Build the TypeScript code
 RUN yarn workspace task-scheduler-entities run build
-RUN yarn workspace task-scheduler-api run build
+RUN yarn workspace task-scheduler run build
 
-# Expose the port the app runs on
-EXPOSE 3000
+# Expose the port the app runs on (if needed)
+# EXPOSE 3000
 
 # Run the application
-CMD ["yarn", "workspace", "task-scheduler-api", "run", "start"]
+CMD ["yarn", "workspace", "task-scheduler", "run", "start"]

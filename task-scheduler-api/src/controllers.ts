@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { AppDataSource } from './data-source';
-import { TaskType } from './entity/TaskType';
-import { Task } from './entity/Task';
+import { AppDataSource } from 'task-scheduler-entities';
+import { TaskType, Task } from 'task-scheduler-entities';
 
 const isErrorWithMessage = (error: unknown): error is { message: string } => {
     return (
@@ -28,12 +27,18 @@ export const createTask = async (req: Request, res: Response) => {
     const { task_type_id, cron_expression, task_details, next_execution, is_recurring } = req.body;
     try {
         const taskRepository = AppDataSource.getRepository(Task);
+        const taskTypeRepository = AppDataSource.getRepository(TaskType);
+
+        const taskType = await taskTypeRepository.findOneBy({ id: task_type_id });
+        if (!taskType) {
+            return res.status(400).json({ message: 'Invalid task type ID' });
+        }
 
         const task = new Task();
-        task.task_type_id = task_type_id;
+        task.taskType = taskType;
         task.cron_expression = cron_expression;
         task.task_details = task_details;
-        task.next_execution = new Date(next_execution);
+        task.scheduled_execution_time = new Date(next_execution);
         task.is_recurring = is_recurring;
 
         await taskRepository.save(task);

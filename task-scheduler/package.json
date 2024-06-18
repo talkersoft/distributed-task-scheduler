@@ -1,28 +1,23 @@
 {
-  "name": "task-scheduler-api",
+  "name": "task-scheduler",
   "version": "1.0.0",
-  "description": "Main application for the task scheduler",
+  "description": "Application for scheduling tasks",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.6",
+    "task-scheduler-entities": "*",
+    "typeorm": "^0.3.20",
     "express": "^4.19.2",
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "task-scheduler-entities": "*",
-    "typeorm": "^0.3.20"
+    "cron-parser": "^4.9.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^16.18.98",
-    "ts-node": "^10.4.0",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.5"
   },
   "author": "",

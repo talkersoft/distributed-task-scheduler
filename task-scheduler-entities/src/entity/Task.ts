@@ -7,7 +7,7 @@ export class Task {
     id!: string;
 
     @ManyToOne(() => TaskType, (taskType) => taskType.id)
-    task_type_id!: TaskType;
+    taskType!: TaskType;
 
     @Column()
     cron_expression!: string;
@@ -16,7 +16,7 @@ export class Task {
     task_details!: object;
 
     @Column()
-    next_execution!: Date;
+    scheduled_execution_time!: Date;
 
     @Column()
     is_recurring!: boolean;

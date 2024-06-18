@@ -1,0 +1,8 @@
+{
+    "private": true,
+    "workspaces": [
+      "task-scheduler-api",
+      "task-scheduler-entities",
+      "task-scheduler"
+    ]
+}  

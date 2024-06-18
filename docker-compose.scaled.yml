@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   postgres:
     image: postgres:13
@@ -41,8 +42,8 @@ services:
 
   task-scheduler-api:
     build:
-      context: .
-      dockerfile: ./task-scheduler-api/Dockerfile
+      context: ./task-scheduler-api
+      dockerfile: Dockerfile
     container_name: task-scheduler-api
     ports:
       - "3000:3000"
@@ -59,8 +60,8 @@ services:
 
   task-scheduler:
     build:
-      context: .
-      dockerfile: ./task-scheduler/Dockerfile
+      context: ./task-scheduler
+      dockerfile: Dockerfile
     container_name: task-scheduler
     environment:
       - POSTGRES_HOST=postgres
@@ -72,6 +73,43 @@ services:
       - postgres
       - init-db
 
+  task-assigner:
+    build:
+      context: ./task-assigner
+      dockerfile: Dockerfile
+    container_name: task-assigner
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=task_scheduler
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=user
+      - RABBITMQ_PASS=password
+    depends_on:
+      - postgres
+      - init-db
+      - rabbitmq
+
+  task-executor:
+    build:
+      context: ./task-executor
+      dockerfile: Dockerfile
+    container_name: task-executor
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=task_scheduler
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=user
+      - RABBITMQ_PASS=password
+    depends_on:
+      - postgres
+      - rabbitmq
+
 volumes:
   postgres_data:
     driver: local
@@ -79,42 +117,3 @@ volumes:
       type: none
       device: ~/.docker/data/task-scheduler
       o: bind
-
-
-
-  # task-assigner:
-  #   build:
-  #     context: ./task-assigner
-  #     dockerfile: Dockerfile
-  #   container_name: task-assigner
-  #   environment:
-  #     - POSTGRES_HOST=postgres
-  #     - POSTGRES_PORT=5432
-  #     - POSTGRES_USER=user
-  #     - POSTGRES_PASSWORD=password
-  #     - POSTGRES_DB=task_scheduler
-  #     - RABBITMQ_HOST=rabbitmq
-  #     - RABBITMQ_USER=user
-  #     - RABBITMQ_PASS=password
-  #   depends_on:
-  #     - postgres
-  #     - init-db
-  #     - rabbitmq
-
-  # task-executor:
-  #   build:
-  #     context: ./task-executor
-  #     dockerfile: Dockerfile
-  #   container_name: task-executor
-  #   environment:
-  #     - POSTGRES_HOST=postgres
-  #     - POSTGRES_PORT=5432
-  #     - POSTGRES_USER=user
-  #     - POSTGRES_PASSWORD=password
-  #     - POSTGRES_DB=task_scheduler
-  #     - RABBITMQ_HOST=rabbitmq
-  #     - RABBITMQ_USER=user
-  #     - RABBITMQ_PASS=password
-  #   depends_on:
-  #     - postgres
-  #     - rabbitmq

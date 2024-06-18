@@ -16,9 +16,10 @@ async function initializeDatabase(retries = 0) {
 
   try {
     await client.connect();
-    const initSqlPath = join(__dirname, 'init.sql'); // Updated path
+    const initSqlPath = join(__dirname, 'init.sql');
     const initSql = readFileSync(initSqlPath).toString();
     await client.query(initSql);
+
     console.log('Tables created successfully');
   } catch (err) {
     if (retries < MAX_RETRIES) {

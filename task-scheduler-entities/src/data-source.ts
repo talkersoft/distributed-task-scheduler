@@ -2,8 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { TaskType } from "./entity/TaskType";
 import { Task } from "./entity/Task";
-import { Log } from "./entity/Log";
-import { TaskExecution } from "./entity/TaskExecution";
+import { TaskSchedule } from "./entity/TaskSchedule";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -12,9 +11,9 @@ export const AppDataSource = new DataSource({
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
-    synchronize: true,
+    synchronize: false,
     logging: false,
-    entities: [TaskType, Task, Log, TaskExecution],
+    entities: [TaskType, Task, TaskSchedule],
     migrations: [],
     subscribers: [],
 });
