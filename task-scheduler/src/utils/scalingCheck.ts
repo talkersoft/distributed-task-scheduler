@@ -1,4 +1,4 @@
-import { AppDataSource } from 'task-scheduler-entities';
+import { AppDataSource } from 'task-entities';
 
 async function checkScalingNeeded() {
     const queryRunner = AppDataSource.createQueryRunner();

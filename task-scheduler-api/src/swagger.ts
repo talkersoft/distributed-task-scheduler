@@ -19,7 +19,7 @@ const options = {
             }
         ]
     },
-    apis: ['./src/routes.ts', './src/controllers/*.ts'], // Adjust the path to your route and controller files
+    apis: ['./src/routes.ts', './src/controllers/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

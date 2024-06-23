@@ -7,14 +7,14 @@ CREATE TABLE IF NOT EXISTS task_types (
 );
 
 -- Insert task types if they do not exist
-INSERT INTO task_types (name)
-SELECT 'reminder'
+INSERT INTO task_types (id, name)
+SELECT uuid_generate_v4(), 'reminder'
 WHERE NOT EXISTS (
     SELECT 1 FROM task_types WHERE name = 'reminder'
 );
 
-INSERT INTO task_types (name)
-SELECT 'notification'
+INSERT INTO task_types (id, name)
+SELECT uuid_generate_v4(), 'notification'
 WHERE NOT EXISTS (
     SELECT 1 FROM task_types WHERE name = 'notification'
 );
@@ -22,11 +22,13 @@ WHERE NOT EXISTS (
 -- Create tasks table
 CREATE TABLE IF NOT EXISTS tasks (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
   task_type_id UUID NOT NULL REFERENCES task_types(id),
   cron_expression VARCHAR(255),
   task_details JSONB,
   scheduled_execution_time TIMESTAMP,
-  is_recurring BOOLEAN DEFAULT FALSE
+  is_recurring BOOLEAN DEFAULT FALSE,
+  task_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create an index on scheduled_execution_time for faster search
@@ -34,7 +36,7 @@ CREATE INDEX IF NOT EXISTS idx_tasks_scheduled_execution_time ON tasks(scheduled
 
 -- Create execution_status type if it does not exist
 DO $$ BEGIN
-  CREATE TYPE execution_status AS ENUM ('Scheduled', 'Queued', 'Started', 'Completed', 'Failed');
+  CREATE TYPE execution_status AS ENUM ('Scheduled', 'Queued', 'Processing', 'Completed', 'Failed');
 EXCEPTION
   WHEN duplicate_object THEN null;
 END $$;
@@ -43,7 +45,7 @@ END $$;
 CREATE TABLE IF NOT EXISTS task_schedule (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   task_id UUID NOT NULL REFERENCES tasks(id),
-  scheduled_execution_time TIMESTAMP,
+  scheduled_time TIMESTAMP,
   start_time TIMESTAMP,
   end_time TIMESTAMP,
   status execution_status,
@@ -51,7 +53,7 @@ CREATE TABLE IF NOT EXISTS task_schedule (
 );
 
 -- Create indexes on task_executions
-CREATE INDEX IF NOT EXISTS idx_task_executions_start_time ON task_schedule(start_time);
+CREATE INDEX IF NOT EXISTS idx_task_executions_scheduled_time ON task_schedule(scheduled_time);
 CREATE INDEX IF NOT EXISTS idx_task_executions_task_id ON task_schedule(task_id);
 
 -- Create configuration table
@@ -99,9 +101,9 @@ WHERE
 GROUP BY
     tt.name;
 
+-- Insert 5 recurring tasks if the tasks table is empty
 DO $$ 
 DECLARE 
-  task_type_id UUID;
   tasks_count INT;
 BEGIN
   -- Check if the table is empty
@@ -109,16 +111,17 @@ BEGIN
 
   IF tasks_count = 0 THEN
     -- Insert 5 recurring tasks with cron expressions
-    INSERT INTO tasks (task_type_id, cron_expression, task_details, is_recurring)
+    INSERT INTO tasks (name, task_type_id, cron_expression, task_details, is_recurring)
     VALUES 
-      ((SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Run every 1 minute"}', TRUE),
-      ((SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Run every 1 minute"}', TRUE),
-      ((SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Run every 5 minutes"}', TRUE),
-      ((SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Run every 5 minutes"}', TRUE),
-      ((SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Run every 5 minutes"}', TRUE);
+      ('Task 1', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Run every 1 minute"}', TRUE),
+      ('Task 2', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Run every 1 minute"}', TRUE),
+      ('Task 3', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Run every 5 minutes"}', TRUE),
+      ('Task 4', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Run every 5 minutes"}', TRUE),
+      ('Task 5', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Run every 5 minutes"}', TRUE);
   END IF;
 
 END $$;
+
 
 -- -- Insert random tasks if the tasks table is empty
 -- DO $$ 

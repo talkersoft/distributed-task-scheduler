@@ -3,15 +3,13 @@ FROM node:16
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-COPY task-scheduler-api/package.json task-scheduler-api/
+COPY task-processor/package.json task-processor/
 COPY task-entities/package.json task-entities/
 RUN yarn install
 
 COPY . .
 
 RUN yarn workspace task-entities run build
-RUN yarn workspace task-scheduler-api run build
+RUN yarn workspace task-processor run build
 
-EXPOSE 3000
-
-CMD ["yarn", "workspace", "task-scheduler-api", "run", "start"]
+CMD ["yarn", "workspace", "task-processor", "run", "start"]

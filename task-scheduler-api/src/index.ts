@@ -3,7 +3,6 @@ import express from "express";
 import router from "./routes";
 import { setupSwagger } from "./swagger";
 
-// Get the current timestamp
 const getCurrentTimestamp = () => new Date().toISOString();
 
 console.log(`Starting server at ${getCurrentTimestamp()}`);
@@ -14,7 +13,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use("/api", router);
 
-// Setup Swagger
 setupSwagger(app);
 
 const RETRY_INTERVAL = 2000; // 2 seconds

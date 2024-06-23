@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTaskTypes, createTask, getTasks, healthCheck } from './controllers';
+import { getTaskTypes, createTask, getTasks, healthCheck, deleteTask, editTask } from './controllers';
 
 const router = Router();
 
@@ -32,7 +32,7 @@ router.get("/task-types", getTaskTypes);
  *                 type: string
  *               task_details:
  *                 type: object
- *               next_execution:
+ *               scheduled_execution_time:
  *                 type: string
  *                 format: date-time
  *               is_recurring:
@@ -53,6 +53,64 @@ router.post("/tasks", createTask);
  *         description: A list of tasks
  */
 router.get("/tasks", getTasks);
+
+/**
+ * @swagger
+ * /tasks/{taskId}:
+ *   delete:
+ *     summary: Delete a task
+ *     parameters:
+ *       - in: path
+ *         name: taskId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Task deleted successfully
+ *       404:
+ *         description: Task not found
+ */
+router.delete("/tasks/:taskId", deleteTask);
+
+/**
+ * @swagger
+ * /tasks/{taskId}:
+ *   put:
+ *     summary: Edit a task
+ *     parameters:
+ *       - in: path
+ *         name: taskId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               task_type_id:
+ *                 type: string
+ *               cron_expression:
+ *                 type: string
+ *               task_details:
+ *                 type: object
+ *               scheduled_execution_time:
+ *                 type: string
+ *                 format: date-time
+ *               is_recurring:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Task edited successfully
+ *       400:
+ *         description: Invalid task type ID
+ *       404:
+ *         description: Task not found
+ */
+router.put("/tasks/:taskId", editTask);
 
 /**
  * @swagger

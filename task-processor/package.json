@@ -1,23 +1,23 @@
 {
-  "name": "task-scheduler",
+  "name": "task-processor",
   "version": "1.0.0",
-  "description": "Application for scheduling tasks",
+  "description": "Processor service for the task scheduler",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "cron-parser": "^4.9.0",
-    "pg": "^8.12.0",
-    "task-entities": "*"
+    "amqplib": "^0.8.0",
+    "axios": "^1.7.2",
+    "pg": "^8.12.0"
   },
   "devDependencies": {
     "@types/pg": "^8.11.6",
+    "@types/amqplib": "^0.10.5",
     "@types/node": "^16.18.98",
-    "typescript": "^4.9.5"
+    "typescript": "^4.4.4"
   },
   "author": "",
-  "license": "ISC",
-  "keywords": []
+  "license": "ISC"
 }
