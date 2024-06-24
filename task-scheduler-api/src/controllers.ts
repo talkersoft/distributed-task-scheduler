@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { AppDataSource, TaskSchedule, ExecutionStatus } from 'task-entities';
-import { TaskType, Task } from 'task-entities';
+import { AppDataSource } from 'task-entities';
+import { TaskType, Task, TaskSchedule, ExecutionStatus } from 'task-entities';
 
 const isErrorWithMessage = (error: unknown): error is { message: string } => {
     return (
@@ -153,4 +153,16 @@ export const editTask = async (req: Request, res: Response) => {
 
 export const healthCheck = (req: Request, res: Response) => {
     res.status(200).json({ message: 'Healthy' });
+};
+
+export const getScheduledTasksSummary = async (req: Request, res: Response) => {
+    try {
+        const query = `SELECT * FROM scheduled_tasks_summary`;
+        const result = await AppDataSource.query(query);
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching scheduled tasks summary:', error);
+        const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
+        res.status(500).json({ message: 'Internal Server Error', error: errorMessage });
+    }
 };

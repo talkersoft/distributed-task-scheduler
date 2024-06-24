@@ -37,9 +37,6 @@ async function updateTaskEndTimeAndStatus(taskScheduleId: string) {
     taskSchedule.end_time = new Date();
     taskSchedule.status = ExecutionStatus.Completed;
     await taskScheduleRepository.save(taskSchedule);
-
-    // Diagnostic logging
-    console.log(`Updated task schedule: ${taskScheduleId}, end_time: ${taskSchedule.end_time.toISOString()}, status: ${taskSchedule.status}`);
   } else {
     console.error(`Task schedule with ID ${taskScheduleId} not found`);
   }

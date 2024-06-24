@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTaskTypes, createTask, getTasks, healthCheck, deleteTask, editTask } from './controllers';
+import { getTaskTypes, createTask, getTasks, healthCheck, deleteTask, editTask, getScheduledTasksSummary } from './controllers';
 
 const router = Router();
 
@@ -122,5 +122,16 @@ router.put("/tasks/:taskId", editTask);
  *         description: Application is healthy
  */
 router.get("/health", healthCheck);
+
+/**
+ * @swagger
+ * /scheduled-tasks-summary:
+ *   get:
+ *     summary: Retrieve a summary of scheduled tasks
+ *     responses:
+ *       200:
+ *         description: A summary of scheduled tasks
+ */
+router.get("/scheduled-tasks-summary", getScheduledTasksSummary);
 
 export default router;

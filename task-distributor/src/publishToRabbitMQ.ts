@@ -14,7 +14,7 @@ async function publishToRabbitMQ(message: string) {
       connection.createChannel((err, channel) => {
         if (err) {
           console.error('Error creating RabbitMQ channel', err);
-          connection.close(); // Close the connection before rejecting
+          connection.close();
           return reject(err);
         }
         const exchange = 'task_exchange';
@@ -26,7 +26,7 @@ async function publishToRabbitMQ(message: string) {
         
         if (!wasPublished) {
           console.error('Error publishing message to RabbitMQ');
-          connection.close(); // Close the connection before rejecting
+          connection.close();
           return reject(new Error('Message was not published'));
         }
 

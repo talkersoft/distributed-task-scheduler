@@ -54,7 +54,6 @@ async function scheduleTasks(config: SchedulerConfig = defaultConfig) {
                         continue;
                     }
 
-                    console.log(`Scheduling recurring task: ${task.id} at ${nextRunTime.toISOString()}`);
                     await queryRunner.query(
                         'INSERT INTO task_schedule (task_id, scheduled_time, status) VALUES ($1, $2, $3)',
                         [task.id, nextRunTime.toISOString(), ExecutionStatus.Scheduled]
@@ -66,7 +65,6 @@ async function scheduleTasks(config: SchedulerConfig = defaultConfig) {
         }
 
         await queryRunner.commitTransaction();
-        console.log('Transaction committed.');
     } catch (err) {
         console.error('Error during transaction, rolling back...', err);
         await queryRunner.rollbackTransaction();
