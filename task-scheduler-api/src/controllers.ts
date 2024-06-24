@@ -157,7 +157,11 @@ export const healthCheck = (req: Request, res: Response) => {
 
 export const getScheduledTasksSummary = async (req: Request, res: Response) => {
     try {
-        const query = `SELECT * FROM scheduled_tasks_summary`;
+        const query = `
+            SELECT sts.*, c.value as number_of_instances
+            FROM scheduled_tasks_summary sts
+            JOIN configuration c ON c.key = 'number_of_instances;
+        `;
         const result = await AppDataSource.query(query);
         res.json(result);
     } catch (error) {

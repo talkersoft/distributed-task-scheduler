@@ -13,15 +13,16 @@ async function distributeTasks(config: DistributorConfig) {
     await queryRunner.startTransaction();
 
     const now = new Date();
-    const nowUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds())); // Current time in UTC without milliseconds
+    const nowUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
 
     const newTasksQuery = `
-      SELECT ts.id, ts.task_id, ts.scheduled_time, t.task_details, t.name
+      SELECT ts.id, ts.task_id, ts.scheduled_time, t.task_details, t.name, tt.name as task_type_name
       FROM task_schedule ts
       JOIN tasks t ON ts.task_id = t.id
+      JOIN task_types tt ON tt.id = t.task_type_id
       WHERE ts.scheduled_time <= $1
       AND ts.status = 'Scheduled'
-      ORDER BY ts.scheduled_time
+      ORDER BY ts.scheduled_time;
     `;
 
     const res = await queryRunner.query(newTasksQuery, [nowUTC.toISOString()]);
@@ -31,17 +32,16 @@ async function distributeTasks(config: DistributorConfig) {
       const message = taskDetails.message;
       const taskScheduleId = row.id;
       const taskName = row.name;
-
-      console.log(`Publishing task: ${row.id}, name: ${taskName}, scheduled_time: ${row.scheduled_time}, current UTC time: ${nowUTC.toISOString()}, message: ${message}`);
+      const taskTypeName = row.task_type_name;
 
       const payload = {
         taskScheduleId: taskScheduleId,
         name: taskName,
-        metadata: taskDetails,
+        taskType: taskTypeName,
+        message: message,
       };
 
       try {
-        // Update task status to 'Queued'
         await queryRunner.query(
           `
           UPDATE task_schedule
@@ -51,14 +51,11 @@ async function distributeTasks(config: DistributorConfig) {
           [taskScheduleId]
         );
 
-        // Publish the task to RabbitMQ
         await publishToRabbitMQ(JSON.stringify(payload));
 
-        console.log(`Task ${taskScheduleId} published successfully.`);
       } catch (publishError) {
         console.error(`Failed to publish task ${taskScheduleId}`, publishError);
 
-        // Update task status back to 'Scheduled' if publishing fails
         await queryRunner.query(
           `
           UPDATE task_schedule
@@ -67,7 +64,6 @@ async function distributeTasks(config: DistributorConfig) {
           `,
           [taskScheduleId]
         );
-        console.log(`Task status reverted to 'Scheduled' for task: ${taskScheduleId}`);
       }
     }
 

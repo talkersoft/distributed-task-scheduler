@@ -1,6 +1,6 @@
 import { Message } from 'amqplib/callback_api';
 import { connectToRabbitMQ, createChannelWithRetry, setupQueueWithRetry } from './rabbitmq';
-import { makeApiRequest, ApiResponse } from './apiRequest';
+import { makeReminderApiRequest, makeNotificationApiRequest, ApiResponse } from './apiRequest';
 import { initializeDatabaseConnection, updateTaskStartTimeAndStatus, updateTaskEndTimeAndStatus } from './database';
 
 const API_URL = process.env.API_URL || 'https://api.namefake.com/english-united-states';
@@ -22,10 +22,8 @@ async function processMessages() {
     channel.consume(queue, async (msg: Message | null) => {
       if (msg !== null) {
         const content = JSON.parse(msg.content.toString());
-        const { taskScheduleId, name, metadata } = content;
-
-        console.log(`Received message: task id: ${taskScheduleId}, name: ${name}, metadata: ${JSON.stringify(metadata)}`);
-
+        const { taskScheduleId, name, message, taskType } = content;
+        
         let retryCount = 0;
         if (msg.properties.headers && typeof msg.properties.headers['x-retries'] === 'number') {
           retryCount = msg.properties.headers['x-retries'] as number;
@@ -34,14 +32,18 @@ async function processMessages() {
         try {
           await updateTaskStartTimeAndStatus(taskScheduleId);
 
-          const data: ApiResponse = await makeApiRequest(API_URL);
+          let data: ApiResponse;
+          if (taskType === 'reminder') {
+            data = await makeReminderApiRequest(API_URL);
+          } else if (taskType === 'notification') {
+            data = await makeNotificationApiRequest(API_URL);
+          } else {
+            throw new Error(`Unknown task type: ${taskType}`);
+          }
 
-          // Update end_time and status to Completed
+          console.log(`Received ${taskType}: task id: ${taskScheduleId}, name: ${name}, message: ${message}`);
+                    
           await updateTaskEndTimeAndStatus(taskScheduleId);
-
-          // Diagnostic logging
-          console.log(`Task ${taskScheduleId} processed successfully, marked as Completed`);
-
           channel.ack(msg);
         } catch (error) {
           console.error(`Failed to process task ${taskScheduleId}`, error);
@@ -53,6 +55,7 @@ async function processMessages() {
             channel.publish('task_exchange', 'task.message', msg.content, {
               headers: { 'x-retries': retryCount }
             });
+
           } else {
             console.error(`Moving task ${taskScheduleId} to dead-letter queue after ${MAX_PROCESS_RETRIES} attempts`);
             channel.nack(msg, false, false);

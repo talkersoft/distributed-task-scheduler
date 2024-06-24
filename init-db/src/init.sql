@@ -117,12 +117,12 @@ BEGIN
     INSERT INTO tasks (name, task_type_id, cron_expression, task_details, is_recurring)
     VALUES 
       ('Task 1', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Walk the dog."}', TRUE),
-      ('Task 2', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE),
+      ('Task 2', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE),
       ('Task 3', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Book a flight"}', TRUE),
-      ('Task 4', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Workout Session"}', TRUE),
+      ('Task 4', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Workout Session"}', TRUE),
       ('Task 5', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Check mail"}', TRUE),
-      ('Task 6', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Organize Files"}', TRUE),
-      ('Task 7', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Call mom"}', TRUE),
-      ('Task 8', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Backup Data"}', TRUE);
+      ('Task 6', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Organize Files"}', TRUE),
+      ('Task 7', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Call mom"}', TRUE),
+      ('Task 8', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Backup Data"}', TRUE);
   END IF;
 END $$;
