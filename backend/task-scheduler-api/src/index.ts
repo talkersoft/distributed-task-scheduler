@@ -15,7 +15,7 @@ app.use("/api", router);
 
 setupSwagger(app);
 
-const RETRY_INTERVAL = 2000;
+const RETRY_INTERVAL = 5000;
 const MAX_RETRIES = 10;
 
 async function initializeApp(retries = 0) {

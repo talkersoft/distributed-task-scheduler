@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS tasks (
 );
 
 CREATE INDEX IF NOT EXISTS idx_tasks_scheduled_execution_time ON tasks(scheduled_execution_time);
+CREATE INDEX IF NOT EXISTS idx_tasks_task_type_id ON tasks(task_type_id);
 
 DO $$ BEGIN
   CREATE TYPE execution_status AS ENUM ('Scheduled', 'Queued', 'Processing', 'Completed', 'Failed');
@@ -43,7 +44,9 @@ CREATE TABLE IF NOT EXISTS task_schedule (
   start_time TIMESTAMP,
   end_time TIMESTAMP,
   status execution_status,
-  elapsed_time BIGINT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (end_time - start_time)) * 1000) STORED
+  latency BIGINT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (start_time - scheduled_time)) * 1000) STORED,
+  elapsed_execution_time BIGINT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (end_time - start_time)) * 1000) STORED,
+  elapsed_time BIGINT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (end_time - scheduled_time)) * 1000) STORED
 );
 
 CREATE INDEX IF NOT EXISTS idx_task_executions_scheduled_time ON task_schedule(scheduled_time);
@@ -67,7 +70,9 @@ JOIN
 JOIN
     task_schedule ts ON t.id = ts.task_id
 WHERE
-    ts.start_time IS NOT NULL AND ts.end_time IS NOT NULL
+    ts.start_time IS NOT NULL
+    AND ts.end_time IS NOT NULL
+    AND ts.scheduled_time >= NOW() - INTERVAL '1 YEAR'
 GROUP BY
     tt.id, tt.name;
 
@@ -78,7 +83,7 @@ WITH ScheduledTasks AS (
         tt.name AS task_type_name,
         ts.scheduled_time,
         COUNT(*) AS no_of_tasks,
-        SUM(aet.average_elapsed_time) AS total_elapsed_time
+        SUM(ROUND(aet.average_elapsed_time, 2)) AS required_compute_time
     FROM
         task_schedule ts
     JOIN
@@ -91,20 +96,34 @@ WITH ScheduledTasks AS (
         ts.status = 'Scheduled'
     GROUP BY
         tt.id, tt.name, ts.scheduled_time
+),
+AggregatedTasks AS (
+    SELECT
+        scheduled_time,
+        SUM(required_compute_time) AS required_compute_time,
+        SUM(no_of_tasks) AS no_of_tasks
+    FROM
+        ScheduledTasks
+    GROUP BY
+        scheduled_time
 )
 SELECT
-    scheduled_time,
-    SUM(total_elapsed_time) AS total_elapsed_time,
-    SUM(no_of_tasks) AS no_of_tasks
+    at.scheduled_time,
+    at.required_compute_time,
+    at.no_of_tasks,
+    c.value as current_number_of_instances,
+    CEIL(at.required_compute_time / 9000.0) as required_instances
 FROM
-    ScheduledTasks
-GROUP BY
-    scheduled_time
+    AggregatedTasks at
+JOIN
+    configuration c 
+ON 
+    c.key = 'number_of_instances'
 ORDER BY
-    scheduled_time;
+    at.scheduled_time;
 
 INSERT INTO configuration (key, value)
-VALUES ('number_of_instances', '1')
+VALUES ('number_of_instances', '3')
 ON CONFLICT (key) DO NOTHING;
 
 DO $$ 
@@ -116,13 +135,17 @@ BEGIN
   IF tasks_count = 0 THEN
     INSERT INTO tasks (name, task_type_id, cron_expression, task_details, is_recurring)
     VALUES 
-      ('Task 1', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Walk the dog."}', TRUE),
-      ('Task 2', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE),
-      ('Task 3', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Book a flight"}', TRUE),
-      ('Task 4', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Workout Session"}', TRUE),
-      ('Task 5', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Check mail"}', TRUE),
-      ('Task 6', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Organize Files"}', TRUE),
-      ('Task 7', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Call mom"}', TRUE),
-      ('Task 8', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Backup Data"}', TRUE);
+        ('Task 1', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Build Software"}', TRUE),
+        ('Task 2', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE),
+        ('Task 3', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Book a flight"}', TRUE),
+        ('Task 4', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Walk the dog"}', TRUE),
+        ('Task 5', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Feed the cat"}', TRUE),
+        ('Task 6', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Water the plants"}', TRUE),
+        ('Task 7', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Take out the trash"}', TRUE),
+        ('Task 8', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Play a sport"}', TRUE),
+        ('Task 9', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Check mail"}', TRUE),
+        ('Task 10', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Organize Files"}', TRUE),
+        ('Task 11', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Backup Data"}', TRUE),
+        ('Task 12', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '0 * * * *', '{"message": "Wash the dishes"}', TRUE);
   END IF;
 END $$;

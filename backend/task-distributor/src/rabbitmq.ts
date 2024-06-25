@@ -1,6 +1,6 @@
 import amqp from 'amqplib/callback_api';
 
-const RETRY_INTERVAL = 2000;
+const RETRY_INTERVAL = 5000;
 const MAX_RETRIES = 10;
 
 const RABBITMQ_HOST = process.env.RABBITMQ_HOST || 'localhost';

@@ -6,7 +6,7 @@ interface SchedulerConfig {
 }
 
 const defaultConfig: SchedulerConfig = {
-    scheduleInterval: 60000,
+    scheduleInterval: parseInt(process.env.SCHEDULE_INTERVAL || '60000', 10),
 };
 
 async function scheduleTasks(config: SchedulerConfig = defaultConfig) {

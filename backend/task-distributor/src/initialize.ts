@@ -2,7 +2,7 @@ import { AppDataSource } from 'task-entities';
 import { setupRabbitMQ } from './rabbitmq';
 import { distributeTasks, DistributorConfig } from './distributor';
 
-const RETRY_INTERVAL = 2000;
+const RETRY_INTERVAL = 5000;
 const MAX_RETRIES = 10;
 
 const defaultConfig: DistributorConfig = {

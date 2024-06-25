@@ -2,7 +2,7 @@ import { Client } from 'pg';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-const RETRY_INTERVAL = 2000;
+const RETRY_INTERVAL = 5000;
 const MAX_RETRIES = 10;
 
 async function initializeDatabase(retries = 0) {

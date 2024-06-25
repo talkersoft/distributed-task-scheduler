@@ -1,8 +1,11 @@
 import { AppDataSource, TaskSchedule, ExecutionStatus } from 'task-entities';
 import { Repository } from 'typeorm';
 
+const RETRY_INTERVAL = 5000;
+const MAX_RETRIES = 10;
+
 async function initializeDatabaseConnection() {
-  let retries = 10;
+  let retries = MAX_RETRIES;
   while (retries) {
     try {
       await AppDataSource.initialize();
@@ -11,7 +14,7 @@ async function initializeDatabaseConnection() {
     } catch (err) {
       console.log(`Retrying database connection... ${retries} attempts left`);
       retries -= 1;
-      await new Promise(res => setTimeout(res, 2000));
+      await new Promise(res => setTimeout(res, RETRY_INTERVAL));
     }
   }
 }

@@ -3,7 +3,7 @@ import amqp from 'amqplib/callback_api';
 const RABBITMQ_HOST = process.env.RABBITMQ_HOST || 'localhost';
 const RABBITMQ_USER = process.env.RABBITMQ_USER || 'guest';
 const RABBITMQ_PASS = process.env.RABBITMQ_PASS || 'guest';
-const CONNECTION_RETRY_INTERVAL = 2000;
+const CONNECTION_RETRY_INTERVAL = 5000;
 const CONNECTION_MAX_RETRIES = 10;
 const CHANNEL_RETRY_INTERVAL = 5000;
 const QUEUE_SETUP_RETRY_INTERVAL = 5000;
