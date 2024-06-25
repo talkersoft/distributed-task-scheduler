@@ -41,7 +41,7 @@ services:
   task-scheduler-api:
     build:
       context: .
-      dockerfile: ./task-scheduler-api/Dockerfile
+      dockerfile: ./backend/task-scheduler-api/Dockerfile
     container_name: task-scheduler-api
     ports:
       - "3000:3000"
@@ -59,7 +59,7 @@ services:
   task-scheduler:
     build:
       context: .
-      dockerfile: ./task-scheduler/Dockerfile
+      dockerfile: ./backend/task-scheduler/Dockerfile
     container_name: task-scheduler
     environment:
       - POSTGRES_HOST=postgres
@@ -74,7 +74,7 @@ services:
   task-distributor:
     build:
       context: .
-      dockerfile: ./task-distributor/Dockerfile
+      dockerfile: ./backend/task-distributor/Dockerfile
     container_name: task-distributor
     environment:
       - THROTTLE_INTERVAL=500
@@ -94,7 +94,7 @@ services:
   task-processor:
     build:
       context: .
-      dockerfile: ./task-processor/Dockerfile
+      dockerfile: ./backend/task-processor/Dockerfile
     container_name: task-processor
     environment:
       - POSTGRES_HOST=postgres

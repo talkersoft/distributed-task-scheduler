@@ -1,6 +1,7 @@
 #!/bin/bash
-pushd "$(git rev-parse --show-toplevel)"
+gitroot=$(git rev-parse --show-toplevel)
 
+pushd "$gitroot/backend"
   WORKSPACE_SEARCH_STRINGS=("task")
   PACKAGE_DEPENDENCY_DIRS=("init-db")
   NUKE=false
@@ -11,8 +12,6 @@ pushd "$(git rev-parse --show-toplevel)"
       NUKE=true
     fi
   done
-
-  cd "$(git rev-parse --show-toplevel)"
 
   if [ "$NUKE" = true ]; then
     echo "Removing root node_modules and yarn.lock"
@@ -49,5 +48,16 @@ pushd "$(git rev-parse --show-toplevel)"
       yarn workspace "$folder_name" run build
     done
   done
+popd
 
+pushd "$gitroot/web-app"
+  if [ "$NUKE" = true ]; then
+    echo "Removing node_modules and yarn.lock in web-app"
+    rm -rf ./node_modules
+    rm -f ./yarn.lock
+  fi
+
+  yarn install
+  yarn workspace storybook run build
+  yarn workspace task-scheduler-web run build
 popd

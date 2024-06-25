@@ -2,14 +2,13 @@ FROM node:16
 
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+COPY backend/package.json yarn.lock ./
+COPY backend/task-distributor/package.json task-distributor/
+COPY backend/task-entities/package.json task-entities/
 
-COPY task-distributor/package.json task-distributor/
-COPY task-entities/package.json task-entities/
+COPY backend .
 
 RUN yarn install
-
-COPY . .
 
 RUN yarn workspace task-entities run build
 RUN yarn workspace task-distributor run build
