@@ -1,60 +1,32 @@
 #!/bin/bash
 gitroot=$(git rev-parse --show-toplevel)
 
+
+function clean_node_modules_and_yarn_lock() {
+    find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+    find . -name "yarn.lock" -type f -exec rm -f '{}' +
+    echo "Deleted all node_modules directories and yarn.lock files."
+}
+
+
 pushd "$gitroot/backend"
-  WORKSPACE_SEARCH_STRINGS=("task")
-  PACKAGE_DEPENDENCY_DIRS=("init-db")
-  NUKE=false
-
-  # Check for the --nuke argument
-  for arg in "$@"; do
-    if [ "$arg" == "--nuke" ]; then
-      NUKE=true
-    fi
-  done
-
   if [ "$NUKE" = true ]; then
-    echo "Removing root node_modules and yarn.lock"
-    rm -rf ./node_modules
-    rm -f ./yarn.lock
+    echo "Removing node_modules and yarn.lock in web-app"
+    clean_node_modules_and_yarn_lock
 
-    for SEARCH_STRING in "${WORKSPACE_SEARCH_STRINGS[@]}"; do
-      echo "Removing node_modules and yarn.lock in subdirectories matching $SEARCH_STRING"
-      find . -maxdepth 2 -type d -name "*$SEARCH_STRING*" -exec bash -c 'cd "$0" && echo "Removing node_modules in $0" && rm -rf ./node_modules && rm -f ./yarn.lock' {} \;
-    done
-
-    for DIR in "${PACKAGE_DEPENDENCY_DIRS[@]}"; do
-      echo "Removing node_modules and yarn.lock in $DIR"
-      rm -rf ./$DIR/node_modules
-      rm -f ./$DIR/yarn.lock
-    done
   fi
 
-  for DIR in "${PACKAGE_DEPENDENCY_DIRS[@]}"; do
-    echo "Installing dependencies in $DIR"
-    pushd ./$DIR
-    yarn install
-    popd
-  done
-
-  echo "Running yarn install at root"
   yarn install
-
-  echo "Building workspaces"
-  for SEARCH_STRING in "${WORKSPACE_SEARCH_STRINGS[@]}"; do
-    find . -maxdepth 2 -type d -name "*$SEARCH_STRING*" -print0 | while IFS= read -r -d '' dir; do
-      folder_name=$(basename "$dir")
-      echo "Building workspace $folder_name"
-      yarn workspace "$folder_name" run build
-    done
-  done
+  yarn workspace task-entities run build
+  yarn workspace task-distributor run build
+  yarn workspace task-processor run build
+  yarn workspace task-scheduler run build
+  yarn workspace task-scheduler-api run build
 popd
 
 pushd "$gitroot/web-app"
   if [ "$NUKE" = true ]; then
-    echo "Removing node_modules and yarn.lock in web-app"
-    rm -rf ./node_modules
-    rm -f ./yarn.lock
+    clean_node_modules_and_yarn_lock
   fi
 
   yarn install

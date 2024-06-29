@@ -13,4 +13,6 @@ RUN yarn install
 RUN yarn workspace task-entities run build
 RUN yarn workspace task-distributor run build
 
-CMD ["yarn", "workspace", "task-distributor", "run", "start"]
+EXPOSE 9228
+# CMD ["yarn", "workspace", "task-distributor", "run", "start"]
+CMD ["yarn", "workspace", "task-distributor", "run", "debug"]

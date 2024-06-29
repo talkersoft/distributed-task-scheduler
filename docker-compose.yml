@@ -43,8 +43,6 @@ services:
       context: .
       dockerfile: ./backend/task-scheduler-api/Dockerfile
     container_name: task-scheduler-api
-    ports:
-      - "3000:3000"
     environment:
       - BASE_URL=http://localhost:3000/api
       - POSTGRES_HOST=postgres
@@ -55,6 +53,9 @@ services:
     depends_on:
       - postgres
       - init-db
+    ports:
+      - "3000:3000"
+      - "9227:9227"
 
   task-scheduler:
     build:
@@ -71,6 +72,8 @@ services:
     depends_on:
       - postgres
       - init-db
+    ports:
+      - "9229:9229"
 
   task-distributor:
     build:
@@ -91,6 +94,30 @@ services:
       - postgres
       - init-db
       - rabbitmq
+    ports:
+      - "9228:9228"
+
+  task-processor:
+    build:
+      context: .
+      dockerfile: ./backend/task-processor/Dockerfile
+    container_name: task-processor
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=task_scheduler
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=user
+      - RABBITMQ_PASS=password
+      - API_URL=https://api.namefake.com/english-united-states
+      - PROCESSING_MAX_RETRIES=3
+    depends_on:
+      - init-db
+      - rabbitmq
+    ports:
+      - "9226:9226"
 
   task-processor-1:
     build:

@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 interface ApiResponse {
-  phone_h: string;
+  name: string;
   sport: string;
+  plasticcard: string;
 }
 
 async function makeNotificationApiRequest(apiUrl: string): Promise<ApiResponse> {

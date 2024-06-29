@@ -12,7 +12,7 @@ async function initializeDatabaseConnection() {
       console.log('Database connection established');
       break;
     } catch (err) {
-      console.log(`Retrying database connection... ${retries} attempts left`);
+      console.log(`Retrying database connection in ${RETRY_INTERVAL / 1000} seconds... (${retries + 1}/${MAX_RETRIES})`);
       retries -= 1;
       await new Promise(res => setTimeout(res, RETRY_INTERVAL));
     }

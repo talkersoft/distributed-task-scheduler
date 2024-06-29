@@ -22,7 +22,7 @@ async function processMessages() {
     channel.consume(queue, async (msg: Message | null) => {
       if (msg !== null) {
         const content = JSON.parse(msg.content.toString());
-        const { taskScheduleId, name, message, taskType } = content;
+        const { taskScheduleId, name, message, taskType} = content;
         
         let retryCount = 0;
         if (msg.properties.headers && typeof msg.properties.headers['x-retries'] === 'number') {
@@ -35,13 +35,14 @@ async function processMessages() {
           let data: ApiResponse;
           if (taskType === 'reminder') {
             data = await makeReminderApiRequest(API_URL);
+            console.log(`Received ${taskType} - Task Name: ${name}, ${data.name}, don't forget to ${message} before you play ${data.sport}`);
           } else if (taskType === 'notification') {
             data = await makeNotificationApiRequest(API_URL);
+            const maskedCard = data.plasticcard.slice(0, -4).replace(/\d/g, '*') + data.plasticcard.slice(-4);
+            console.log(`Received ${taskType} - Task Name: ${name}, ${data.name}, your credit card# ${maskedCard} has been declined, please update payment method.`);
           } else {
             throw new Error(`Unknown task type: ${taskType}`);
           }
-
-          console.log(`Received ${taskType}: task id: ${taskScheduleId}, name: ${name}, message: ${message}`);
                     
           await updateTaskEndTimeAndStatus(taskScheduleId);
           channel.ack(msg);

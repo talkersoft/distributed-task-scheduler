@@ -26,6 +26,9 @@ export class Task {
     is_recurring!: boolean;
 
     @Column()
+    time_zone!: string;
+
+    @Column()
     task_created!: Date;
 
     @OneToMany(() => TaskSchedule, (taskSchedule) => taskSchedule.task)
