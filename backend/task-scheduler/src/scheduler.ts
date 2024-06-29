@@ -13,38 +13,33 @@ async function scheduleTasks(config: { scheduleInterval: number }) {
         const todayStartUTC: Moment = now.clone().startOf('day');
         const todayEndUTC: Moment = now.clone().add(1, 'day').startOf('day');
 
-        // Combined query to fetch recurring tasks without existing schedules in the specified date range
         const recurringTasks: Task[] = await queryRunner.query(`
             SELECT t.* 
             FROM tasks t
             LEFT JOIN task_schedule ts ON t.id = ts.task_id 
-                AND ts.scheduled_time >= '2024-06-29 00:00:00' 
-                AND ts.scheduled_time < '2024-06-30 00:00:00'
+                AND ts.scheduled_time >= '${todayStartUTC.format('YYYY-MM-DD HH:mm:ss')}' 
+                AND ts.scheduled_time < '${todayEndUTC.format('YYYY-MM-DD HH:mm:ss')}'
             WHERE ts.id IS NULL
                 AND t.is_recurring = true
         `);
 
         for (const task of recurringTasks) {
             if (!task.cron_expression) {
-                console.error(`Task with ID ${task.id} is recurring but has no cron expression.`);
                 continue;
             }
 
             const taskCreatedInUTC: Moment = moment.utc(task.task_created);
-            const taskTimeZone = task.time_zone;
-            const options: ParserOptions = { currentDate: todayStartUTC.toDate(), tz: taskTimeZone };
+            const options: ParserOptions = { currentDate: now.toDate(), tz: 'UTC' };
             const cronInterval = parseExpression(task.cron_expression, options);
 
             while (true) {
-                const nextScheduledRunInTaskTimeZone = moment.tz(cronInterval.next().toDate(), taskTimeZone);
-                let nextScheduledRunInUTC = nextScheduledRunInTaskTimeZone.clone().utc();
+                const nextScheduledRunInUTC = moment(cronInterval.next().toDate());
 
                 if (nextScheduledRunInUTC.isAfter(todayEndUTC)) {
                     break;
                 }
 
                 if (nextScheduledRunInUTC.isBefore(taskCreatedInUTC)) {
-                    console.log(`Skipped next run time due to nextScheduledRunInUTC ${nextScheduledRunInUTC.format('YYYY-MM-DD HH:mm:ss')} < taskCreatedInUTC ${taskCreatedInUTC.format('YYYY-MM-DD HH:mm:ss')}`);
                     continue;
                 }
 
@@ -52,8 +47,6 @@ async function scheduleTasks(config: { scheduleInterval: number }) {
                     'INSERT INTO task_schedule (task_id, scheduled_time, status) VALUES ($1, $2, $3)',
                     [task.id, nextScheduledRunInUTC.toISOString(), ExecutionStatus.Scheduled]
                 );
-
-                nextScheduledRunInUTC = moment(cronInterval.next().toDate()).utc();
             }
         }
 
