@@ -11,7 +11,7 @@ function clean_node_modules_and_yarn_lock() {
 
 pushd "$gitroot/backend"
   if [ "$NUKE" = true ]; then
-    echo "Removing node_modules and yarn.lock in web-app"
+    echo "Removing node_modules and yarn.lock in frontend"
     clean_node_modules_and_yarn_lock
 
   fi
@@ -24,7 +24,7 @@ pushd "$gitroot/backend"
   yarn workspace task-scheduler-api run build
 popd
 
-pushd "$gitroot/web-app"
+pushd "$gitroot/frontend"
   if [ "$NUKE" = true ]; then
     clean_node_modules_and_yarn_lock
   fi
