@@ -135,17 +135,17 @@ BEGIN
   IF tasks_count = 0 THEN
     INSERT INTO tasks (name, task_type_id, cron_expression, task_details, is_recurring, time_zone, task_created)
     VALUES 
-    ('Task 1', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '18 01 29 6 *', '{"message": "Build Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 2', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 3', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Book a flight"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 4', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Walk the dog"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 5', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Feed the cat"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 6', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 7', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Take out the trash"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 8', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Make the bed"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 9', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Check mail"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 10', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Organize Files"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 11', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Backup Data"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 12', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '0 * * * *', '{"message": "Wash the dishes"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC');
+    --('Task 1', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '18 01 29 6 *', '{"message": "Build Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    ('Task 2', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC');
+    -- ('Task 3', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Book a flight"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 4', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Walk the dog"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 5', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Feed the cat"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 6', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 7', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Take out the trash"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 8', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/5 * * * *', '{"message": "Make the bed"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 9', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Check mail"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 10', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Organize Files"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 11', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Backup Data"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    -- ('Task 12', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '0 * * * *', '{"message": "Wash the dishes"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC');
   END IF;
 END $$;

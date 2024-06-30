@@ -1,3 +1,4 @@
+@import '../../../dark-theme.scss';
 .storybook-page {
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -5,7 +6,7 @@
   padding: 48px 20px;
   margin: 0 auto;
   max-width: 600px;
-  color: #333;
+  color: var(--color-on-surface);
 }
 
 .storybook-page h2 {
@@ -23,7 +24,7 @@
 
 .storybook-page a {
   text-decoration: none;
-  color: #1ea7fd;
+  color: var(--color-primary);
 }
 
 .storybook-page ul {
@@ -41,8 +42,8 @@
   font-size: 11px;
   line-height: 12px;
   font-weight: 700;
-  background: #e7fdd8;
-  color: #66bf3c;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
   padding: 4px 12px;
   margin-right: 10px;
   vertical-align: top;
@@ -65,5 +66,5 @@
 }
 
 .storybook-page .tip-wrapper svg path {
-  fill: #1ea7fd;
+  fill: var(--color-primary);
 }

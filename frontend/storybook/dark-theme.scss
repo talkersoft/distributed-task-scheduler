@@ -1,0 +1,47 @@
+:root {
+  --color-neutral-900: #f4f4f7;
+  --color-neutral-850: #e8e8eb;
+  --color-neutral-800: #c7c7ca;
+  --color-neutral-750: #bebec1;
+  --color-neutral-700: #acacb0;
+  --color-neutral-650: #88898d;
+  --color-neutral-600: #7e7f83;
+  --color-neutral-550: #75767a;
+  --color-neutral-500: #6b6c71;
+  --color-neutral-450: #626368;
+  --color-neutral-400: #595a5e;
+  --color-neutral-350: #505155;
+  --color-neutral-300: #46474c;
+  --color-neutral-250: #343539;
+  --color-neutral-200: #2f3034;
+  --color-neutral-150: #2a2b30;
+  --color-neutral-100: #212227;
+  --color-neutral-50: #18191e;
+  --color-neutral-0: #0f1215;
+
+  --color-background: var(--color-neutral-50);
+  --color-surface: var(--color-neutral-200);
+  --color-primary: var(--color-neutral-850);
+  --color-secondary: var(--color-neutral-600);
+  --color-error: #cf6679;
+  --color-on-primary: var(--color-neutral-250);
+  --color-on-secondary: var(--color-neutral-350);
+  --color-on-error: var(--color-neutral-50);
+  --color-on-background: var(--color-neutral-150);
+  --color-on-surface: var(--color-neutral-900);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+}
+
+button {
+  background-color: var(--color-neutral-600); // Set the button to gray
+  color: var(--color-on-surface);
+}
+
+.header, .footer {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+}

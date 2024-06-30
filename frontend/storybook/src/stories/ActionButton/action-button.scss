@@ -1,0 +1,43 @@
+@import '../../../dark-theme.scss';
+
+.action-button {
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  border: 0;
+  border-radius: 3em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 10px 16px;
+  transition: background-color 0.3s ease;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+
+  &--primary {
+    background-color: var(--color-neutral-700);
+    color: var(--color-on-primary);
+  }
+
+  &--secondary {
+    background-color: var(--color-neutral-400);
+    color: var(--color-on-surface);
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+  }
+
+  &--small {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  &--medium {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  &--large {
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+}

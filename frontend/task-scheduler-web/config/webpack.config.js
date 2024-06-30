@@ -434,6 +434,12 @@ module.exports = function (webpackEnv) {
                 compact: isEnvProduction,
               },
             },
+            // Add ts-loader to handle TypeScript files
+            {
+              test: /\.tsx?$/,
+              use: 'ts-loader',
+              exclude: /node_modules/,
+            },
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {

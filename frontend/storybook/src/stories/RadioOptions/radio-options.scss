@@ -1,0 +1,45 @@
+@import '../../../dark-theme.scss';
+
+.radio-options {
+  display: flex;
+  flex-direction: column;
+
+  &.horizontal {
+    flex-direction: row;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    color: var(--color-on-surface); // Text color
+
+    input[type="radio"] {
+      margin-right: 0.5rem;
+      appearance: none;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background-color: var(--color-neutral-450); // Unselected dot background color
+      border: 1px solid var(--color-neutral-450); // Unselected dot border color
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-top: -2px; // Adjust to center the dot vertically with the text
+    }
+
+    input[type="radio"]:checked::before {
+      content: '';
+      display: inline-block;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background-color: var(--color-primary); // Selected dot background color
+    }
+
+    input[type="radio"]:hover {
+      border-color: var(--color-neutral-300); // Hover state border color
+    }
+  }
+}

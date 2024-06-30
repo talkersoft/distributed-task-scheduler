@@ -1,0 +1,39 @@
+.data-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+
+  th,
+  td {
+    border: 1px solid #444; // Slightly darker border
+    padding: 8px;
+  }
+
+  th {
+    background-color: #333; // Darker header background
+    color: #fff; // White text for header
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #222; // Darker gray for even rows
+  }
+
+  tbody tr:nth-child(odd) {
+    background-color: #111; // Even darker gray for odd rows
+  }
+
+  tbody tr:hover {
+    background-color: #555; // Lighter gray for hover effect
+  }
+
+  td {
+    color: #fff; // White text for body
+  }
+
+  .edit-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #fff; // White color for icon
+    cursor: pointer;
+  }
+}

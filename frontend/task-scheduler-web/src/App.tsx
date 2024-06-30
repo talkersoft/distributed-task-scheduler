@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
-
+import './App.scss';
+import { ActionButton } from 'storybook/src/stories/ActionButton/ActionButton';
 function App() {
   return (
     <div className="App">
@@ -18,6 +18,7 @@ function App() {
         >
           Learn React
         </a>
+        <ActionButton label="Click Me" onClick={() => alert('Button Clicked!')} primary size="medium" />
       </header>
     </div>
   );

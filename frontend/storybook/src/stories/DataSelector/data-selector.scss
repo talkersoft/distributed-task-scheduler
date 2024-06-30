@@ -1,0 +1,54 @@
+@import '../../../dark-theme.scss';
+
+.data-select-container {
+  position: relative;
+  width: 200px;
+  cursor: pointer;
+}
+
+.selected-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background-color: var(--color-neutral-450);
+  border: 1px solid var(--color-neutral-600);
+  border-radius: 4px;
+  color: var(--color-on-surface);
+}
+
+.placeholder {
+  color: var(--color-on-surface);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-on-surface);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  width: 100%;
+  background-color: var(--color-neutral-450);
+  border: 1px solid var(--color-neutral-600);
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 10;
+}
+
+.dropdown li {
+  list-style: none;
+  padding: 10px 12px;
+  color: var(--color-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown li:hover {
+  background-color: var(--color-neutral-400);
+}

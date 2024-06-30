@@ -1,0 +1,39 @@
+@import '../../../dark-theme.scss';
+
+.text-input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  padding-bottom: 1.5rem; // Adjust this value if needed
+  position: relative;
+
+  .text-input-label {
+    margin-bottom: 0.5rem;
+    color: var(--color-on-surface);
+  }
+
+  .text-input {
+    padding: 0.5rem;
+    border: 1px solid var(--color-neutral-600);
+    border-radius: 4px;
+    background-color: var(--color-neutral-450);
+    color: var(--color-on-surface);
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    &.invalid {
+      border-color: var(--color-error);
+    }
+  }
+
+  .error-message {
+    color: var(--color-error);
+    font-size: 0.875rem;
+    position: absolute;
+    bottom: -1.5rem; // Adjust this value if needed
+  }
+}

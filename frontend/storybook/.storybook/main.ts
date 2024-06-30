@@ -1,5 +1,4 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
-
 import { join, dirname } from "path";
 
 /**
@@ -9,6 +8,7 @@ import { join, dirname } from "path";
 function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, "package.json")));
 }
+
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
@@ -23,5 +23,24 @@ const config: StorybookConfig = {
     name: getAbsolutePath("@storybook/react-webpack5"),
     options: {},
   },
+  webpackFinal: async (config) => {
+    if (!config.module) {
+      config.module = { rules: [] };
+    }
+    if (!config.module.rules) {
+      config.module.rules = [];
+    }
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader'
+      ],
+      include: join(__dirname, '../src'),
+    });
+    return config;
+  },
 };
+
 export default config;
