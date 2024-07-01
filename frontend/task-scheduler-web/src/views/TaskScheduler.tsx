@@ -1,33 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import TaskForm from './TaskSchedulerEdit';
+// src/views/TaskScheduler.tsx
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import ListTasks from '../components/ListTasks';
-import moment from 'moment-timezone';
+import { fetchTasks } from '../redux/taskSlice';
+import { fetchTaskTypes } from '../redux/taskTypeSlice';
+import { RootState, AppDispatch } from '../redux/store';
 import './task-scheduler.scss';
 
 const TaskScheduler = () => {
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [taskTypes, setTaskTypes] = useState<any[]>([]);
-  const [timeZones] = useState(moment.tz.names().map(tz => ({ key: tz, value: tz })));
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+  const taskStatus = useSelector((state: RootState) => state.tasks.status);
+  const taskTypes = useSelector((state: RootState) => state.taskTypes.taskTypes);
+  const taskTypesStatus = useSelector((state: RootState) => state.taskTypes.status);
+  const error = useSelector((state: RootState) => state.tasks.error);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/tasks`)
-      .then(response => response.json())
-      .then(data => setTasks(data))
-      .catch(error => console.error('Error fetching tasks:', error));
+    if (taskStatus === 'idle') {
+      dispatch(fetchTasks());
+    }
+    if (taskTypesStatus === 'idle') {
+      dispatch(fetchTaskTypes());
+    }
+  }, [taskStatus, taskTypesStatus, dispatch]);
 
-    fetch(`${process.env.REACT_APP_API_URL}/task-types`)
-      .then(response => response.json())
-      .then(data => setTaskTypes(data.map((type: any) => ({ key: type.id, value: type.name }))))
-      .catch(error => console.error('Error fetching task types:', error));
-  }, []);
+  const handleEditTask = (task: any) => {
+    navigate(`/task-scheduler/edit/${task.id}`);
+  };
 
-  const handleSaveTask = (task: any) => {
-    // Save task logic here
+  const handleCreateTask = () => {
+    navigate('/task-scheduler/create');
   };
 
   return (
     <div className="task-scheduler">
-      <ListTasks tasks={tasks} />
+      <button onClick={handleCreateTask}>Create Task</button>
+      {taskStatus === 'loading' && <div>Loading...</div>}
+      {taskStatus === 'succeeded' && <ListTasks tasks={tasks} onEdit={handleEditTask} />}
+      {taskStatus === 'failed' && <div>{error}</div>}
     </div>
   );
 };

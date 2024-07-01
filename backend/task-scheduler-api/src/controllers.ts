@@ -94,7 +94,9 @@ export const getTasks = async (req: Request, res: Response) => {
                 cron_expression: task.cron_expression,
                 message: taskDetails.message,
                 next_runtime: nextRuntime,
-                time_zone: task.time_zone
+                time_zone: task.time_zone,
+                is_reccuring: task.is_recurring,
+                scheduled_execution_time: task.scheduled_execution_time
             };
         });
 

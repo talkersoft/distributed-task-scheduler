@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { RadioOptions } from './RadioOptions';
+import RadioOptions from './RadioOptions';
 
 const meta: Meta<typeof RadioOptions> = {
   title: 'Components/RadioOptions',

@@ -1,52 +1,14 @@
 import React from 'react';
-import { useTable, Column } from 'react-table';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { useTable, Column, CellProps } from 'react-table';
 import './data-grid.scss';
 
-interface Task {
-  name: string;
-  task_type: string;
-  cron_expression: string;
-  message: string;
-  next_runtime: string;
-  time_zone: string;
+interface DataGridProps<T extends object> {
+  data: T[];
+  columns: Column<T>[];
+  onEdit: (row: T) => void;
 }
 
-export const DataGrid: React.FC<{ data: Task[] }> = ({ data }) => {
-  const columns = React.useMemo<Column<Task>[]>(
-    () => [
-      {
-        Header: 'Edit',
-        Cell: () => <PencilSquareIcon className="edit-icon" />,
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-      {
-        Header: 'Task Type',
-        accessor: 'task_type',
-      },
-      {
-        Header: 'Cron Expression',
-        accessor: 'cron_expression',
-      },
-      {
-        Header: 'Message',
-        accessor: 'message',
-      },
-      {
-        Header: 'Next Run',
-        accessor: 'next_runtime',
-      },
-      {
-        Header: 'Time Zone',
-        accessor: 'time_zone',
-      }
-    ],
-    []
-  );
-
+export const DataGrid = <T extends object>({ data, columns, onEdit }: DataGridProps<T>) => {
   const tableInstance = useTable({ columns, data });
 
   const {
@@ -60,22 +22,32 @@ export const DataGrid: React.FC<{ data: Task[] }> = ({ data }) => {
   return (
     <table {...getTableProps()} className="data-grid">
       <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-            ))}
-          </tr>
-        ))}
+        {headerGroups.map(headerGroup => {
+          const { key, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
+          return (
+            <tr key={key} {...headerGroupProps}>
+              {headerGroup.headers.map(column => {
+                const { key, ...columnProps } = column.getHeaderProps();
+                return (
+                  <th key={key} {...columnProps}>{column.render('Header')}</th>
+                );
+              })}
+            </tr>
+          );
+        })}
       </thead>
       <tbody {...getTableBodyProps()}>
         {rows.map(row => {
           prepareRow(row);
+          const { key, ...rowProps } = row.getRowProps();
           return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => (
-                <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-              ))}
+            <tr key={key} {...rowProps}>
+              {row.cells.map(cell => {
+                const { key, ...cellProps } = cell.getCellProps();
+                return (
+                  <td key={key} {...cellProps}>{cell.render('Cell')}</td>
+                );
+              })}
             </tr>
           );
         })}

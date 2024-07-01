@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './radio-options.scss';
 
 interface RadioOptionsProps {
   options: string[];
   direction?: 'vertical' | 'horizontal';
-  onChange?: (option: string) => void;
+  onChange: (value: string) => void;
+  value: string;
 }
 
-export const RadioOptions: React.FC<RadioOptionsProps> = ({ options, direction = 'vertical', onChange }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setSelectedOption(newValue);
-    if (onChange) {
-      onChange(newValue);
-    }
-  };
-
+const RadioOptions: React.FC<RadioOptionsProps> = ({ options, direction = 'vertical', onChange, value }) => {
   return (
     <div className={`radio-options ${direction}`}>
       {options.map((option) => (
@@ -25,8 +16,8 @@ export const RadioOptions: React.FC<RadioOptionsProps> = ({ options, direction =
           <input
             type="radio"
             value={option}
-            checked={selectedOption === option}
-            onChange={handleOptionChange}
+            checked={value === option}
+            onChange={(e) => onChange(e.target.value)}
           />
           {option}
         </label>
@@ -34,3 +25,5 @@ export const RadioOptions: React.FC<RadioOptionsProps> = ({ options, direction =
     </div>
   );
 };
+
+export default RadioOptions;
