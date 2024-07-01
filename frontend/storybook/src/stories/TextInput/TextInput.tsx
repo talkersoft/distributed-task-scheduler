@@ -8,6 +8,7 @@ interface TextInputProps {
   onChange?: (value: string) => void;
   validate?: (value: string) => boolean;
   errorMessage?: string;
+  disabled?: boolean; // Added disabled prop
 }
 
 export const TextInput = ({
@@ -17,6 +18,7 @@ export const TextInput = ({
   onChange,
   validate,
   errorMessage = 'Invalid input',
+  disabled = false, // Default value for disabled prop
 }: TextInputProps) => {
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(true);
@@ -48,6 +50,7 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        disabled={disabled} // Apply disabled prop
       />
       {!isValid && isTouched && <span className="error-message">{errorMessage}</span>}
     </div>

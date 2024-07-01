@@ -2,7 +2,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
 
-const baseUrl = process.env.BASE_URL || 'http://localhost:3000/api';
+const baseUrl = process.env.BASE_URL || 'http://localhost:5001/api';
 
 const options = {
     definition: {

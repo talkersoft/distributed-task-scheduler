@@ -18,7 +18,25 @@
   --color-neutral-100: #212227;
   --color-neutral-50: #18191e;
   --color-neutral-0: #0f1215;
+  --color-high-contrast-purple-900: #4b0082; /* Indigo */
+  --color-high-contrast-purple-800: #8a2be2; /* BlueViolet */
+  --color-high-contrast-purple-700: #9932cc; /* DarkOrchid */
+  --color-high-contrast-magenta-900: #ff00ff; /* Magenta */
+  --color-high-contrast-magenta-800: #ff1493; /* DeepPink */
+  --color-high-contrast-magenta-700: #ff69b4; /* HotPink */
+  --color-high-contrast-orange-900: #ff4500; /* OrangeRed */
+  --color-high-contrast-orange-800: #ff6347; /* Tomato */
+  --color-high-contrast-orange-700: #ff8c00; /* DarkOrange */
+  
+  --color-high-contrast-green-900: #00ff00; /* Lime */
+  --color-high-contrast-blue-900: #1e90ff; /* DodgerBlue */
+  --color-high-contrast-yellow-900: #ffff00; /* Yellow */
 
+  --field-bg-color: var(--color-neutral-0);
+  --color-input: var(--color-neutral-0);
+
+  --color-placeholder: var(--color-high-contrast-purple-700);
+  
   --color-background: var(--color-neutral-50);
   --color-surface: var(--color-neutral-200);
   --color-primary: var(--color-neutral-850);

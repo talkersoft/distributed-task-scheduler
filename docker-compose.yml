@@ -44,17 +44,18 @@ services:
       dockerfile: ./backend/task-scheduler-api/Dockerfile
     container_name: task-scheduler-api
     environment:
-      - BASE_URL=http://localhost:3000/api
+      - BASE_URL=http://localhost:5001/api
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=task_scheduler
+      - CORS_URLS=http://localhost:3001
     depends_on:
       - postgres
       - init-db
     ports:
-      - "3000:3000"
+      - "5001:5001"
       - "9227:9227"
 
   task-scheduler:
@@ -97,27 +98,6 @@ services:
     ports:
       - "9228:9228"
 
-  task-processor:
-    build:
-      context: .
-      dockerfile: ./backend/task-processor/Dockerfile
-    container_name: task-processor
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=task_scheduler
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USER=user
-      - RABBITMQ_PASS=password
-      - API_URL=https://api.namefake.com/english-united-states
-      - PROCESSING_MAX_RETRIES=3
-    depends_on:
-      - init-db
-      - rabbitmq
-    ports:
-      - "9226:9226"
 
   task-processor-1:
     build:
@@ -139,45 +119,45 @@ services:
       - init-db
       - rabbitmq
 
-  task-processor-2:
-    build:
-      context: .
-      dockerfile: ./backend/task-processor/Dockerfile
-    container_name: task-processor-2
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=task_scheduler
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USER=user
-      - RABBITMQ_PASS=password
-      - API_URL=https://api.namefake.com/english-united-states
-      - PROCESSING_MAX_RETRIES=3
-    depends_on:
-      - init-db
-      - rabbitmq
+#   task-processor-2:
+#     build:
+#       context: .
+#       dockerfile: ./backend/task-processor/Dockerfile
+#     container_name: task-processor-2
+#     environment:
+#       - POSTGRES_HOST=postgres
+#       - POSTGRES_PORT=5432
+#       - POSTGRES_USER=user
+#       - POSTGRES_PASSWORD=password
+#       - POSTGRES_DB=task_scheduler
+#       - RABBITMQ_HOST=rabbitmq
+#       - RABBITMQ_USER=user
+#       - RABBITMQ_PASS=password
+#       - API_URL=https://api.namefake.com/english-united-states
+#       - PROCESSING_MAX_RETRIES=3
+#     depends_on:
+#       - init-db
+#       - rabbitmq
 
-  task-processor-3:
-    build:
-      context: .
-      dockerfile: ./backend/task-processor/Dockerfile
-    container_name: task-processor-3
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=task_scheduler
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USER=user
-      - RABBITMQ_PASS=password
-      - API_URL=https://api.namefake.com/english-united-states
-      - PROCESSING_MAX_RETRIES=3
-    depends_on:
-      - init-db
-      - rabbitmq
+#   task-processor-3:
+#     build:
+#       context: .
+#       dockerfile: ./backend/task-processor/Dockerfile
+#     container_name: task-processor-3
+#     environment:
+#       - POSTGRES_HOST=postgres
+#       - POSTGRES_PORT=5432
+#       - POSTGRES_USER=user
+#       - POSTGRES_PASSWORD=password
+#       - POSTGRES_DB=task_scheduler
+#       - RABBITMQ_HOST=rabbitmq
+#       - RABBITMQ_USER=user
+#       - RABBITMQ_PASS=password
+#       - API_URL=https://api.namefake.com/english-united-states
+#       - PROCESSING_MAX_RETRIES=3
+#     depends_on:
+#       - init-db
+#       - rabbitmq
 
 volumes:
   postgres_data:

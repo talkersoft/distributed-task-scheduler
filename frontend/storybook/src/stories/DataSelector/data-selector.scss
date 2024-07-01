@@ -11,10 +11,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background-color: var(--color-neutral-450);
+  background-color: var(--field-bg-color);
   border: 1px solid var(--color-neutral-600);
   border-radius: 4px;
   color: var(--color-on-surface);
+  font-size: 14px; // Ensure font size matches
+  line-height: 20px; // Ensure line height matches
 }
 
 .placeholder {
@@ -31,7 +33,7 @@
   position: absolute;
   top: calc(100% + 5px);
   width: 100%;
-  background-color: var(--color-neutral-450);
+  background-color: var(--field-bg-color);
   border: 1px solid var(--color-neutral-600);
   border-radius: 4px;
   max-height: 150px;
@@ -42,11 +44,14 @@
 
 .dropdown li {
   list-style: none;
-  padding: 10px 12px;
+  padding: 10px 12px; // Ensure padding matches
   color: var(--color-on-surface);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
+  font-size: 14px; // Ensure font size matches
+  line-height: 20px; // Ensure line height matches
 }
 
 .dropdown li:hover {

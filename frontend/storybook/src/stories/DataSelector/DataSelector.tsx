@@ -1,30 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './data-selector.scss';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import moment from 'moment-timezone';
 
-interface DataSelectorProps {
-  items: string[];
-  placeholder?: string;
-  selected?: string;
-  onChange?: (item: string) => void;
+export interface Item {
+  key: string;
+  value: string;
 }
 
-const DataSelector = ({
+interface DataSelectorProps {
+  items: Item[];
+  placeholder?: string;
+  selected?: string;
+  onChange?: (item: Item) => void;
+}
+
+const DataSelector: React.FC<DataSelectorProps> = ({
   items,
   placeholder = 'Select an item',
   selected,
   onChange,
-}: DataSelectorProps) => {
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<string | undefined>(selected);
+  const [selectedItem, setSelectedItem] = useState<Item | undefined>(items.find(item => item.key === selected));
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleToggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSelectItem = (item: string) => {
+  const handleSelectItem = (item: Item) => {
     setSelectedItem(item);
     setIsOpen(false);
     onChange?.(item);
@@ -46,14 +50,14 @@ const DataSelector = ({
   return (
     <div className="data-select-container" ref={containerRef}>
       <div className="selected-item" onClick={handleToggleDropdown}>
-        <div className="placeholder">{selectedItem || placeholder}</div>
+        <div className="placeholder">{selectedItem?.value || placeholder}</div>
         <ChevronDownIcon className="icon" />
       </div>
       {isOpen && (
         <ul className="dropdown">
           {items.map((item) => (
-            <li key={item} onClick={() => handleSelectItem(item)}>
-              {item}
+            <li key={item.key} onClick={() => handleSelectItem(item)}>
+              {item.value}
             </li>
           ))}
         </ul>

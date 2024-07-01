@@ -1,27 +1,54 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.scss';
-import { ActionButton } from 'storybook/src/stories/ActionButton/ActionButton';
-function App() {
+import { Header } from 'storybook/src/stories/Header/Header';
+import Home from './views/Home';
+import TaskScheduler from './views/TaskScheduler';
+import TaskSchedulerEdit from './views/TaskSchedulerEdit';
+import LeftNav from './components/LeftNav';
+import Content from './components/Content';
+
+const App = () => {
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Task Scheduler', path: '/task-scheduler' },
+    { name: 'Logs', path: '/logs' },
+    { name: 'Monitor', path: '/monitor' },
+  ];
+
+  const NavigationHandler = () => {
+    const navigate = useNavigate();
+    const handleNavClick = (path: string) => {
+      navigate(path);
+    };
+
+    return (
+      <>
+        <LeftNav items={navItems} onItemClick={handleNavClick} />
+        <Content>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/task-scheduler" element={<TaskScheduler />} />
+            <Route path="/task-scheduler/edit" element={<TaskSchedulerEdit />} />
+          </Routes>
+        </Content>
+      </>
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <ActionButton label="Click Me" onClick={() => alert('Button Clicked!')} primary size="medium" />
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Header
+          onCreateAccount={() => {}}
+          onLogin={() => {}}
+          onLogout={() => {}}
+          user={{ name: 'User' }}
+        />
+        <NavigationHandler />
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

@@ -6,7 +6,7 @@ interface TabSelectorProps {
   onSelect: (selectedTab: string) => void;
 }
 
-const TabSelector: React.FC<TabSelectorProps> = ({ tabs, onSelect }) => {
+export const TabSelector: React.FC<TabSelectorProps> = ({ tabs, onSelect }) => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const handleTabClick = (tab: string) => {
@@ -30,5 +30,3 @@ const TabSelector: React.FC<TabSelectorProps> = ({ tabs, onSelect }) => {
     </div>
   );
 };
-
-export default TabSelector;

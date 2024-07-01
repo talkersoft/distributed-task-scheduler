@@ -1,13 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { TaskType } from "./TaskType";
 import { TaskSchedule } from "./TaskSchedule";
 
-@Entity()
+export interface TaskDetails {
+    message?: string;
+    [key: string]: any;
+}
+
+@Entity('tasks') // Specify the correct table name
 export class Task {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
     @ManyToOne(() => TaskType, (taskType) => taskType.id)
+    @JoinColumn({ name: "task_type_id" })
     taskType!: TaskType;
 
     @Column()
@@ -17,7 +23,7 @@ export class Task {
     cron_expression?: string;
 
     @Column("jsonb")
-    task_details!: object;
+    task_details!: TaskDetails;
 
     @Column()
     scheduled_execution_time?: Date;

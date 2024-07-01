@@ -8,11 +8,17 @@ interface Task {
   task_type: string;
   cron_expression: string;
   message: string;
+  next_runtime: string;
+  time_zone: string;
 }
 
 export const DataGrid: React.FC<{ data: Task[] }> = ({ data }) => {
   const columns = React.useMemo<Column<Task>[]>(
     () => [
+      {
+        Header: 'Edit',
+        Cell: () => <PencilSquareIcon className="edit-icon" />,
+      },
       {
         Header: 'Name',
         accessor: 'name',
@@ -30,9 +36,13 @@ export const DataGrid: React.FC<{ data: Task[] }> = ({ data }) => {
         accessor: 'message',
       },
       {
-        Header: 'Edit',
-        Cell: () => <PencilSquareIcon className="edit-icon" />,
+        Header: 'Next Run',
+        accessor: 'next_runtime',
       },
+      {
+        Header: 'Time Zone',
+        accessor: 'time_zone',
+      }
     ],
     []
   );

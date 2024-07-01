@@ -51,14 +51,16 @@ export function DateSelector({
   };
 
   return (
-    <DatePicker
-      customInput={<CustomButtonInput />}
-      dateFormat="MMMM d, yyyy"
-      maxDate={maxDate || undefined}
-      minDate={minDate || undefined}
-      onChange={handleChange}
-      placeholderText={placeholderText}
-      selected={dateSelection}
-    />
+    <div className="date-picker-container">
+      <DatePicker
+        customInput={<CustomButtonInput />}
+        dateFormat="MMMM d, yyyy"
+        maxDate={maxDate || undefined}
+        minDate={minDate || undefined}
+        onChange={handleChange}
+        placeholderText={placeholderText}
+        selected={dateSelection}
+      />
+    </div>
   );
 }

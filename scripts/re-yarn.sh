@@ -13,7 +13,6 @@ pushd "$gitroot/backend"
   if [ "$NUKE" = true ]; then
     echo "Removing node_modules and yarn.lock in frontend"
     clean_node_modules_and_yarn_lock
-
   fi
 
   yarn install

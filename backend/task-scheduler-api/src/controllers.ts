@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from 'task-entities';
-import { TaskType, Task, TaskSchedule, ExecutionStatus } from 'task-entities';
+import { TaskType, Task, TaskSchedule, ExecutionStatus, TaskDetails } from 'task-entities';
+import moment from 'moment-timezone';
 
 const isErrorWithMessage = (error: unknown): error is { message: string } => {
     return (
@@ -69,8 +70,35 @@ export const createTask = async (req: Request, res: Response) => {
 export const getTasks = async (req: Request, res: Response) => {
     try {
         const taskRepository = AppDataSource.getRepository(Task);
-        const tasks = await taskRepository.find();
-        res.json(tasks);
+        const tasks = await taskRepository.find({ relations: ["taskType", "taskSchedules"] });
+
+        const mappedTasks = tasks.map(task => {
+            let nextRuntime = "N/A";
+
+            if (task.scheduled_execution_time && new Date(task.scheduled_execution_time) > new Date()) {
+                nextRuntime = moment.tz(task.scheduled_execution_time, task.time_zone).format('MM-DD-yyyy hh:mm A');
+            } else {
+                const futureSchedules = task.taskSchedules
+                    .filter(schedule => schedule.start_time === null);
+                if (futureSchedules.length > 0) {
+                    nextRuntime = moment.tz(futureSchedules[0]?.scheduled_time, task.time_zone).format('MM-DD-yyyy hh:mm A');
+                }
+            }
+
+            const taskDetails = task.task_details as TaskDetails;
+
+            return {
+                id: task.id,
+                name: task.name,
+                task_type: task.taskType.name,
+                cron_expression: task.cron_expression,
+                message: taskDetails.message,
+                next_runtime: nextRuntime,
+                time_zone: task.time_zone
+            };
+        });
+
+        res.json(mappedTasks);
     } catch (error) {
         console.error('Error fetching tasks:', error);
         const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';

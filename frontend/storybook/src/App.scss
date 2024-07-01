@@ -1,4 +1,3 @@
-@import '../dark-theme.scss';  // Import the dark theme variables
 
 body {
   background-color: var(--color-background);
@@ -47,4 +46,16 @@ button {
   to {
     transform: rotate(360deg);
   }
+}
+
+// .date-picker-container {
+//   display: inline-block;
+//   position: relative;
+//   z-index: 10;
+//   width: 100%; 
+//   margin: 0; 
+// }
+.date-picker-container {
+  position: relative;
+  display: inline-block; // Ensure the date picker container is inline-block for proper alignment
 }

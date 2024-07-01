@@ -1,0 +1,29 @@
+@import '../dark-theme.scss';
+
+.left-nav {
+  width: 200px;
+  background-color: var(--color-neutral-450);
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      padding: 10px 0;
+      cursor: pointer;
+      color: var(--color-on-surface);
+
+      &:hover {
+        background-color: var(--color-neutral-400);
+      }
+    }
+  }
+}

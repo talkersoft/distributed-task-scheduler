@@ -26,21 +26,24 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    items: ['Item 1', 'Item 2'],
+    items: [
+      { key: 'item1', value: 'Item 1' },
+      { key: 'item2', value: 'Item 2' },
+    ],
     placeholder: 'Select an item',
   },
 };
 
 export const TimeZoneSelector: Story = {
   args: {
-    items: moment.tz.names(),
+    items: moment.tz.names().map(name => ({ key: name, value: name })),
     placeholder: 'Select a time zone',
   },
 };
 
 export const TimeZoneDefault: Story = {
   args: {
-    items: moment.tz.names(),
+    items: moment.tz.names().map(name => ({ key: name, value: name })),
     placeholder: 'Select a time zone',
     selected: moment.tz.guess(),
   },

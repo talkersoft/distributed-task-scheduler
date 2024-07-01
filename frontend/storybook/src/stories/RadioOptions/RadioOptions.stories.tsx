@@ -5,6 +5,11 @@ const meta: Meta<typeof RadioOptions> = {
   title: 'Components/RadioOptions',
   component: RadioOptions,
   tags: ['autodocs'],
+  argTypes: {
+    options: { control: { type: 'object' } },
+    direction: { control: { type: 'radio', options: ['vertical', 'horizontal'] } },
+    onChange: { action: 'changed' },
+  },
 };
 
 export default meta;
