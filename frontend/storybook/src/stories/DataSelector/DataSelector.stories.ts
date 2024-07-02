@@ -14,7 +14,10 @@ const meta = {
     items: { control: 'object' },
     placeholder: { control: 'text' },
     selected: { control: 'text' },
+    label: { control: 'text' },
     onChange: { action: 'changed' },
+    errorMessage: { control: 'text' },
+    isValid: { control: 'boolean' },
   },
   args: {
     onChange: fn(),
@@ -31,6 +34,7 @@ export const Default: Story = {
       { key: 'item2', value: 'Item 2' },
     ],
     placeholder: 'Select an item',
+    label: 'Default Label',
   },
 };
 
@@ -38,6 +42,7 @@ export const TimeZoneSelector: Story = {
   args: {
     items: moment.tz.names().map(name => ({ key: name, value: name })),
     placeholder: 'Select a time zone',
+    label: 'Time Zone Selector',
   },
 };
 
@@ -46,6 +51,7 @@ export const TimeZoneDefault: Story = {
     items: moment.tz.names().map(name => ({ key: name, value: name })),
     placeholder: 'Select a time zone',
     selected: moment.tz.guess(),
+    label: 'Time Zone Selector with Default',
   },
 };
 
@@ -58,5 +64,19 @@ export const DefaultSelected: Story = {
     ],
     placeholder: 'Select an item',
     selected: 'item2',
+    label: 'Default Selected',
+  },
+};
+
+export const WithValidation: Story = {
+  args: {
+    items: [
+      { key: 'item1', value: 'Item 1' },
+      { key: 'item2', value: 'Item 2' },
+    ],
+    placeholder: 'Select an item',
+    label: 'Validated Selector',
+    isValid: false,
+    errorMessage: 'Please select an item',
   },
 };

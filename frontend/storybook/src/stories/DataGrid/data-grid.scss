@@ -7,35 +7,35 @@
 
   th,
   td {
-    border: 1px solid #444; // Slightly darker border
+    border: 1px solid #444;
     padding: 8px;
   }
 
   th {
-    background-color: #333; // Darker header background
-    color: #fff; // White text for header
+    background-color: #333;
+    color: #fff;
   }
 
   tbody tr:nth-child(even) {
-    background-color: #222; // Darker gray for even rows
+    background-color: #222;
   }
 
   tbody tr:nth-child(odd) {
-    background-color: #111; // Even darker gray for odd rows
+    background-color: #111;
   }
 
   tbody tr:hover {
-    background-color: #555; // Lighter gray for hover effect
+    background-color: #555;
   }
 
   td {
-    color: #fff; // White text for body
+    color: #fff;
   }
 
   .edit-icon {
     width: 1.5rem;
     height: 1.5rem;
-    color: #fff; // White color for icon
+    color: #fff;
     cursor: pointer;
   }
 }

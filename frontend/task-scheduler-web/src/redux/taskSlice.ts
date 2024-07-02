@@ -30,6 +30,30 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
   return (await response.json()) as Task[];
 });
 
+export const createTask = createAsyncThunk('tasks/createTask', async (task: Task) => {
+  const body = JSON.stringify(task);
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: body,
+  });
+  return (await response.json()) as Task;
+});
+
+export const editTask = createAsyncThunk('tasks/editTask', async (task: Task) => {
+  const body = JSON.stringify(task);
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks/${task.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: body,
+  });
+  return (await response.json()) as Task;
+});
+
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
@@ -46,6 +70,15 @@ const tasksSlice = createSlice({
       .addCase(fetchTasks.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || null;
+      })
+      .addCase(createTask.fulfilled, (state, action) => {
+        state.tasks.push(action.payload);
+      })
+      .addCase(editTask.fulfilled, (state, action) => {
+        const index = state.tasks.findIndex((task) => task.id === action.payload.id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload;
+        }
       });
   },
 });

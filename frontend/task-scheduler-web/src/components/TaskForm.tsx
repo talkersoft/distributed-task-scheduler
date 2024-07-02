@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput } from 'storybook/src/stories/TextInput/TextInput';
-import { DateSelector } from 'storybook/src/stories/DateSelector/DateSelector';
+import { DateTimeSelector } from 'storybook/src/stories/DateTimeSelector/DateTimeSelector';
 import RadioOptions from 'storybook/src/stories/RadioOptions/RadioOptions';
 import { DataSelector, Item } from 'storybook/src/stories/DataSelector/DataSelector';
 import { isValidCron } from 'cron-validator';
 import { ActionButton } from 'storybook/src/stories/ActionButton/ActionButton';
 import './task-form.scss';
+import moment from 'moment-timezone';
 
 interface TaskFormProps {
   taskTypes: Item[];
@@ -17,17 +18,22 @@ interface TaskFormProps {
 
 const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCancel, task }) => {
   const [name, setName] = useState(task?.name || '');
+  const [nameError, setNameError] = useState<string | undefined>(undefined);
   const [message, setMessage] = useState(task?.message || '');
   const [cronExpression, setCronExpression] = useState(task?.cron_expression || '');
   const [cronError, setCronError] = useState<string | undefined>(undefined);
   const [scheduledExecutionTime, setScheduledExecutionTime] = useState<Date | null>(
     task?.scheduled_execution_time ? new Date(task.scheduled_execution_time) : null
   );
+  const [scheduledExecutionTimeError, setScheduledExecutionTimeError] = useState<string | undefined>(undefined);
   const [isRecurring, setIsRecurring] = useState(task?.is_recurring || false);
   const [taskType, setTaskType] = useState<Item | null>(null);
+  const [taskTypeError, setTaskTypeError] = useState<string | undefined>(undefined);
+  const defaultTimeZone = moment.tz.guess();
   const [timeZone, setTimeZone] = useState<Item | null>(
-    timeZones.find((tz) => tz.key === task?.time_zone) || null
+    timeZones.find((tz) => tz.key === (task?.time_zone || defaultTimeZone)) || null
   );
+  const [timeZoneError, setTimeZoneError] = useState<string | undefined>(undefined);
 
   const determineScheduleType = (task: any) => {
     if (!task) {
@@ -38,7 +44,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
     } else if (task.scheduled_execution_time) {
       return 'Schedule';
     }
-
     return 'Immediately';
   };
 
@@ -55,9 +60,11 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
     if (selectedScheduleType === 'Immediately') {
       setIsRecurring(false);
       setScheduledExecutionTime(null);
+      setScheduledExecutionTimeError(undefined);
     } else if (selectedScheduleType === 'Recurring') {
       setIsRecurring(true);
       setScheduledExecutionTime(null);
+      setScheduledExecutionTimeError(undefined);
     } else {
       setIsRecurring(false);
     }
@@ -69,10 +76,37 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
   }, [task, taskTypes]);
 
   const handleSave = () => {
+    let isValid = true;
+
+    if (name.length <= 1) {
+      setNameError('Task name must be greater than 1 character');
+      isValid = false;
+    }
+
+    if (!taskType) {
+      setTaskTypeError('Task type is required');
+      isValid = false;
+    }
+
+    if (!timeZone) {
+      setTimeZoneError('Time zone is required');
+      isValid = false;
+    }
+
+    if (selectedScheduleType === 'Schedule' && !scheduledExecutionTime) {
+      setScheduledExecutionTimeError('Scheduled time is required');
+      isValid = false;
+    }
+
     if (selectedScheduleType === 'Recurring' && !isValidCron(cronExpression, { alias: true })) {
       setCronError('Invalid cron expression');
+      isValid = false;
+    }
+
+    if (!isValid) {
       return;
     }
+
     const updatedTask = {
       ...task,
       name,
@@ -102,13 +136,12 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
             label="Task Name"
             placeholder="Enter task name"
             value={name}
-            onChange={setName}
-          />
-          <TextInput
-            label="Task Message"
-            placeholder="Enter task message"
-            value={message}
-            onChange={setMessage}
+            onChange={(value) => {
+              setName(value);
+              setNameError(undefined);
+            }}
+            isValid={nameError === undefined}
+            errorMessage={nameError}
           />
         </div>
         <div className="form-section form-row">
@@ -116,20 +149,52 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
             <DataSelector
               label="Select Task Type"
               items={taskTypes}
-              onChange={(item) => setTaskType(item)}
+              onChange={(item) => {
+                setTaskType(item);
+                setTaskTypeError(undefined);
+              }}
               placeholder="Select task type"
               selected={taskType?.key}
+              isValid={taskTypeError === undefined}
+              errorMessage={taskTypeError}
             />
           </div>
           <div className="form-item">
             <DataSelector
               label="Select Time Zone"
               items={timeZones}
-              onChange={(item) => setTimeZone(item)}
+              onChange={(item) => {
+                setTimeZone(item);
+                setTimeZoneError(undefined);
+              }}
               placeholder="Select time zone"
               selected={timeZone?.key}
+              isValid={timeZoneError === undefined}
+              errorMessage={timeZoneError}
             />
           </div>
+        </div>
+        {selectedScheduleType === 'Schedule' && (
+          <div className="form-section">
+            <DateTimeSelector
+              label="Scheduled Time"
+              onChange={(date) => {
+                setScheduledExecutionTime(date);
+                setScheduledExecutionTimeError(undefined);
+              }}
+              selected={scheduledExecutionTime}
+              isValid={scheduledExecutionTimeError === undefined}
+              errorMessage={scheduledExecutionTimeError}
+            />
+          </div>
+        )}
+        <div className="form-section">
+          <TextInput
+            label="Task Message"
+            placeholder="Enter task message"
+            value={message}
+            onChange={setMessage}
+          />
         </div>
         {selectedScheduleType === 'Recurring' && (
           <div className="form-section">
@@ -145,11 +210,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
               isValid={cronError === undefined}
               errorMessage={cronError}
             />
-          </div>
-        )}
-        {selectedScheduleType === 'Schedule' && (
-          <div className="form-section">
-            <DateSelector onChange={(date) => setScheduledExecutionTime(date)} selected={scheduledExecutionTime} />
           </div>
         )}
         <div className="form-section task-form-buttons">

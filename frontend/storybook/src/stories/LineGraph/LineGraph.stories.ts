@@ -19,7 +19,6 @@ const mockData = [
     { scheduled_time: '2024-06-29 01:00', required_instances: 7 },
     { scheduled_time: '2024-06-29 02:00', required_instances: 3 },
     { scheduled_time: '2024-06-29 03:00', required_instances: 5 },
-    // Add more data points for each hour
     { scheduled_time: '2024-06-29 23:00', required_instances: 8 },
     { scheduled_time: '2024-06-29 23:59', required_instances: 6 },
 ];

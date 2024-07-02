@@ -1,5 +1,56 @@
 import { Router } from 'express';
-import { getTaskTypes, createTask, getTasks, healthCheck, deleteTask, editTask, getScheduledTasksSummary } from './controllers';
+import { getTaskTypes, createTask, getTasks, healthCheck, setInactive, editTask, getScheduledTasksSummary } from './controllers';
+
+const router = Router();
+
+/**
+ * @swagger
+ * /task-types:
+ *   get:
+ *     summary: Retrieve a list of task types
+ *     responses:
+ *       200:
+ *         description: A list of task types
+ */
+router.get("/task-types", getTaskTypes);
+
+/**
+ * @swagger
+ * /tasks:
+ *   post:
+ *     summary: Create a new task
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               task_type_id:
+ *                 type: string
+ *               cron_expression:
+ *                 type: string
+ *               task_details:
+ *                 type: object
+ *               scheduled_execution_time:
+ *                 type: string
+ *                 format: date-time
+ *               is_recurring:
+ *                 type: boolean
+ *     responses:
+ *       201:
+ *         description: Task created successfully
+ */
+router.post("/tasks", createTask);
+
+/**
+ * @swagger
+ * /tasks:
+ *  Here's the complete updated `routes.ts` file with Swagger documentation and the updated controller functions:
+
+```typescript
+import { Router } from 'express';
+import { getTaskTypes, createTask, getTasks, healthCheck, setInactive, editTask, getScheduledTasksSummary } from './controllers';
 
 const router = Router();
 
@@ -57,25 +108,6 @@ router.get("/tasks", getTasks);
 /**
  * @swagger
  * /tasks/{taskId}:
- *   delete:
- *     summary: Delete a task
- *     parameters:
- *       - in: path
- *         name: taskId
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       204:
- *         description: Task deleted successfully
- *       404:
- *         description: Task not found
- */
-router.delete("/tasks/:taskId", deleteTask);
-
-/**
- * @swagger
- * /tasks/{taskId}:
  *   put:
  *     summary: Edit a task
  *     parameters:
@@ -111,6 +143,25 @@ router.delete("/tasks/:taskId", deleteTask);
  *         description: Task not found
  */
 router.put("/tasks/:taskId", editTask);
+
+/**
+ * @swagger
+ * /tasks/{taskId}/inactive:
+ *   put:
+ *     summary: Set a task to inactive
+ *     parameters:
+ *       - in: path
+ *         name: taskId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Task set to inactive successfully
+ *       404:
+ *         description: Task not found
+ */
+router.put("/tasks/:taskId/inactive", setInactive);
 
 /**
  * @swagger

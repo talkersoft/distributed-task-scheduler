@@ -1,10 +1,11 @@
+// src/views/TaskSchedulerEdit.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import TaskForm from '../components/TaskForm';
 import { RootState, AppDispatch } from '../redux/store';
 import { fetchTaskTypes } from '../redux/taskTypeSlice';
-import { Task } from '../redux/taskSlice';
+import { Task, editTask } from '../redux/taskSlice';
 import './task-scheduler.scss';
 import moment from 'moment-timezone';
 
@@ -33,8 +34,19 @@ const TaskSchedulerEdit = () => {
   }, [task, taskTypes]);
 
   const handleSaveTask = (updatedTask: Task) => {
-    console.log('Save task:', updatedTask);
-    // Save task logic here
+    if (updatedTask.is_recurring) {
+      updatedTask.cron_expression = updatedTask.cron_expression || '';
+      updatedTask.scheduled_execution_time = undefined;
+    } else if (updatedTask.scheduled_execution_time) {
+      updatedTask.cron_expression = '';
+      updatedTask.scheduled_execution_time = moment.utc(updatedTask.scheduled_execution_time).toISOString();
+    } else {
+      updatedTask.cron_expression = '';
+      updatedTask.scheduled_execution_time = undefined;
+    }
+    dispatch(editTask(updatedTask)).then(() => {
+      navigate('/task-scheduler');
+    });
   };
 
   const handleCancel = () => {

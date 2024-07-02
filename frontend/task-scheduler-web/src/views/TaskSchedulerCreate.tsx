@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TaskForm from '../components/TaskForm';
 import { RootState, AppDispatch } from '../redux/store';
+import { createTask } from '../redux/taskSlice';
 import { Task } from '../redux/taskSlice';
 import './task-scheduler.scss';
 import moment from 'moment-timezone';
@@ -10,16 +11,23 @@ import { useNavigate } from 'react-router-dom';
 
 const TaskSchedulerCreate = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const taskTypes = useSelector((state: RootState) => state.taskTypes.taskTypes).map((type: any) => ({ key: type.id, value: type.name }));
   const timeZones = moment.tz.names().map((tz) => ({ key: tz, value: tz }));
 
   const handleSaveTask = (task: Task) => {
-    console.log('Create task:', task);
-    // Dispatch an action to save the new task
+    if (!task.is_recurring && task.scheduled_execution_time) {
+      task.scheduled_execution_time = moment.utc(task.scheduled_execution_time).toISOString();
+    }
+    dispatch(createTask(task)).then(() => {
+      navigate('/task-scheduler');
+    });
   };
+
   const handleCancel = () => {
     navigate('/task-scheduler');
   };
+
   return (
     <div className="task-scheduler">
       <TaskForm

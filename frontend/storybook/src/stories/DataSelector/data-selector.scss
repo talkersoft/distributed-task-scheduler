@@ -10,9 +10,9 @@
 }
 
 .text-input-label {
-  font-size: 14px;  // Ensure this matches other labels
-  line-height: 20px;  // Ensure this matches other labels
-  color: var(--color-on-surface);  // Ensure this matches other labels
+  font-size: 14px;  
+  line-height: 20px;  
+  color: var(--color-on-surface); 
 }
 
 .selected-item {
@@ -30,6 +30,10 @@
 
 .placeholder {
   color: var(--color-on-surface);
+}
+
+.placeholder.invalid {
+  border-color: var(--color-error);
 }
 
 .icon {
@@ -65,4 +69,11 @@
 
 .dropdown li:hover {
   background-color: var(--color-neutral-400);
+}
+
+.error-message {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  position: absolute;
+  bottom: -1.5rem;
 }

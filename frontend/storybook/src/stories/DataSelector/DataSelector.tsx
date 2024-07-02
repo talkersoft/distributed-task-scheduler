@@ -13,6 +13,8 @@ interface DataSelectorProps {
   selected?: string;
   onChange?: (item: Item) => void;
   label: string;
+  errorMessage?: string;
+  isValid?: boolean;
 }
 
 const DataSelector: React.FC<DataSelectorProps> = ({
@@ -21,14 +23,23 @@ const DataSelector: React.FC<DataSelectorProps> = ({
   placeholder = 'Select an item',
   selected,
   onChange,
+  errorMessage,
+  isValid = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item | undefined>(items.find(item => item.key === selected));
+  const [currentErrorMessage, setCurrentErrorMessage] = useState(errorMessage);
+  const [currentIsValid, setCurrentIsValid] = useState(isValid);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSelectedItem(items.find(item => item.key === selected));
   }, [items, selected]);
+
+  useEffect(() => {
+    setCurrentErrorMessage(errorMessage);
+    setCurrentIsValid(isValid);
+  }, [errorMessage, isValid]);
 
   const handleToggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -57,7 +68,7 @@ const DataSelector: React.FC<DataSelectorProps> = ({
     <div className="data-select-container" ref={containerRef}>
       <label className="text-input-label">{label}</label>
       <div className="selected-item" onClick={handleToggleDropdown}>
-        <div className="placeholder">{selectedItem?.value || placeholder}</div>
+        <div className={`placeholder ${!currentIsValid ? 'invalid' : ''}`}>{selectedItem?.value || placeholder}</div>
         <ChevronDownIcon className="icon" />
       </div>
       {isOpen && (
@@ -69,6 +80,7 @@ const DataSelector: React.FC<DataSelectorProps> = ({
           ))}
         </ul>
       )}
+      {!currentIsValid && currentErrorMessage && <span className="error-message">{currentErrorMessage}</span>}
     </div>
   );
 };

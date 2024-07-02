@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from 'task-entities';
 import { TaskType, Task, TaskSchedule, ExecutionStatus, TaskDetails } from 'task-entities';
+import { IsNull } from 'typeorm';
 import moment from 'moment-timezone';
 
 const isErrorWithMessage = (error: unknown): error is { message: string } => {
@@ -10,6 +11,40 @@ const isErrorWithMessage = (error: unknown): error is { message: string } => {
         'message' in error &&
         typeof (error as { message: string }).message === 'string'
     );
+};
+
+interface TaskResponse {
+    id: string;
+    name: string;
+    task_type: string;
+    task_type_id: string;
+    cron_expression: string | undefined;
+    message: string | undefined;
+    next_runtime: string;
+    time_zone: string;
+    is_recurring: boolean;
+    scheduled_execution_time: Date | undefined;
+}
+
+const formatTaskResponse = (task: Task): TaskResponse => {
+    const nextRuntime = task.scheduled_execution_time 
+        ? moment.tz(task.scheduled_execution_time, task.time_zone).format('MM-DD-yyyy hh:mm A')
+        : 'N/A';
+
+    const taskDetails = task.task_details as TaskDetails;
+
+    return {
+        id: task.id,
+        name: task.name,
+        task_type: task.taskType.name,
+        task_type_id: task.taskType.id,
+        cron_expression: task.cron_expression,
+        message: taskDetails.message,
+        next_runtime: nextRuntime,
+        time_zone: task.time_zone,
+        is_recurring: task.is_recurring,
+        scheduled_execution_time: task.scheduled_execution_time,
+    };
 };
 
 export const getTaskTypes = async (req: Request, res: Response) => {
@@ -25,7 +60,7 @@ export const getTaskTypes = async (req: Request, res: Response) => {
 };
 
 export const createTask = async (req: Request, res: Response) => {
-    const { task_type_id, cron_expression, task_details, scheduled_execution_time, is_recurring } = req.body;
+    const { task_type_id, name, cron_expression, task_details, scheduled_execution_time, is_recurring, message, time_zone } = req.body;
     try {
         const taskRepository = AppDataSource.getRepository(Task);
         const taskTypeRepository = AppDataSource.getRepository(TaskType);
@@ -38,14 +73,16 @@ export const createTask = async (req: Request, res: Response) => {
 
         const task = new Task();
         task.taskType = taskType;
-        task.task_details = task_details;
+        task.name = name;
+        task.task_details = { ...task_details, message };
         task.is_recurring = is_recurring;
-        task.task_created = new Date();
+        task.task_created = moment.utc().toDate();
+        task.time_zone = time_zone;
 
         if (is_recurring) {
             task.cron_expression = cron_expression;
         } else {
-            task.scheduled_execution_time = new Date(scheduled_execution_time);
+            task.scheduled_execution_time = moment.utc(scheduled_execution_time || moment.utc()).toDate();
         }
 
         await taskRepository.save(task);
@@ -59,7 +96,7 @@ export const createTask = async (req: Request, res: Response) => {
             await taskScheduleRepository.save(taskSchedule);
         }
 
-        res.status(201).json(task);
+        res.status(201).json(formatTaskResponse(task));
     } catch (error) {
         console.error('Error creating task:', error);
         const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
@@ -72,34 +109,7 @@ export const getTasks = async (req: Request, res: Response) => {
         const taskRepository = AppDataSource.getRepository(Task);
         const tasks = await taskRepository.find({ relations: ["taskType", "taskSchedules"] });
 
-        const mappedTasks = tasks.map(task => {
-            let nextRuntime = "N/A";
-
-            if (task.scheduled_execution_time && new Date(task.scheduled_execution_time) > new Date()) {
-                nextRuntime = moment.tz(task.scheduled_execution_time, task.time_zone).format('MM-DD-yyyy hh:mm A');
-            } else {
-                const futureSchedules = task.taskSchedules
-                    .filter(schedule => schedule.start_time === null);
-                if (futureSchedules.length > 0) {
-                    nextRuntime = moment.tz(futureSchedules[0]?.scheduled_time, task.time_zone).format('MM-DD-yyyy hh:mm A');
-                }
-            }
-
-            const taskDetails = task.task_details as TaskDetails;
-
-            return {
-                id: task.id,
-                name: task.name,
-                task_type: task.taskType.name,
-                task_type_id: task.taskType.id,
-                cron_expression: task.cron_expression,
-                message: taskDetails.message,
-                next_runtime: nextRuntime,
-                time_zone: task.time_zone,
-                is_recurring: task.is_recurring,
-                scheduled_execution_time: task.scheduled_execution_time
-            };
-        });
+        const mappedTasks = tasks.map(formatTaskResponse);
 
         res.json(mappedTasks);
     } catch (error) {
@@ -109,7 +119,7 @@ export const getTasks = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteTask = async (req: Request, res: Response) => {
+export const setInactive = async (req: Request, res: Response) => {
     const { taskId } = req.params;
     try {
         const taskRepository = AppDataSource.getRepository(Task);
@@ -120,12 +130,14 @@ export const deleteTask = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Task not found' });
         }
 
-        await taskScheduleRepository.delete({ task: task });
-        await taskRepository.delete({ id: taskId });
+        task.active = false;
+        await taskRepository.save(task);
+
+        await taskScheduleRepository.delete({ task: task, start_time: IsNull() });
 
         res.status(204).send();
     } catch (error) {
-        console.error('Error deleting task:', error);
+        console.error('Error setting task inactive:', error);
         const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
         res.status(500).json({ message: 'Internal Server Error', error: errorMessage });
     }
@@ -133,7 +145,7 @@ export const deleteTask = async (req: Request, res: Response) => {
 
 export const editTask = async (req: Request, res: Response) => {
     const { taskId } = req.params;
-    const { task_type_id, cron_expression, task_details, scheduled_execution_time, is_recurring } = req.body;
+    const { task_type_id, name, cron_expression, task_details, scheduled_execution_time, is_recurring, message, time_zone } = req.body;
     try {
         const taskRepository = AppDataSource.getRepository(Task);
         const taskTypeRepository = AppDataSource.getRepository(TaskType);
@@ -149,17 +161,19 @@ export const editTask = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Invalid task type ID' });
         }
 
-        await taskScheduleRepository.delete({ task: task });
+        await taskScheduleRepository.delete({ task: task, start_time: IsNull() });
 
         task.taskType = taskType;
-        task.task_details = task_details;
+        task.name = name;
+        task.task_details = { ...task_details, message };
         task.is_recurring = is_recurring;
+        task.time_zone = time_zone;
 
         if (is_recurring) {
             task.cron_expression = cron_expression;
             task.scheduled_execution_time = undefined;
         } else {
-            task.scheduled_execution_time = new Date(scheduled_execution_time);
+            task.scheduled_execution_time = moment.utc(scheduled_execution_time || moment.utc()).toDate();
             task.cron_expression = undefined;
         }
 
@@ -174,7 +188,7 @@ export const editTask = async (req: Request, res: Response) => {
             await taskScheduleRepository.save(taskSchedule);
         }
 
-        res.status(200).json(task);
+        res.status(200).json(formatTaskResponse(task));
     } catch (error) {
         console.error('Error editing task:', error);
         const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
@@ -191,7 +205,7 @@ export const getScheduledTasksSummary = async (req: Request, res: Response) => {
         const query = `
             SELECT sts.*, c.value as number_of_instances
             FROM scheduled_tasks_summary sts
-            JOIN configuration c ON c.key = 'number_of_instances;
+            JOIN configuration c ON c.key = 'number_of_instances';
         `;
         const result = await AppDataSource.query(query);
         res.json(result);

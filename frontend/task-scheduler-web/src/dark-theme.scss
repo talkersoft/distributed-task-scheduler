@@ -1,27 +1,65 @@
 :root {
-  --color-neutral-100: #f0f0f0;
-  --color-neutral-200: #d9d9d9;
-  --color-neutral-300: #bfbfbf;
-  --color-neutral-400: #a6a6a6;
-  --color-neutral-450: #8c8c8c;
-  --color-neutral-500: #737373;
-  --color-neutral-600: #595959;
-  --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #0d0d0d;
-  --color-primary: #1a73e8;
-  --color-secondary: #e91e63;
-  --color-error: #d32f2f;
-  --color-on-primary: #ffffff;
-  --color-on-secondary: #ffffff;
-  --color-on-error: #ffffff;
-  --color-on-surface: #ffffff;
-  --color-background: #121212;
-  --color-surface: #212121;
+  --color-neutral-900: #f4f4f7;
+  --color-neutral-850: #e8e8eb;
+  --color-neutral-800: #c7c7ca;
+  --color-neutral-750: #bebec1;
+  --color-neutral-700: #acacb0;
+  --color-neutral-650: #88898d;
+  --color-neutral-600: #7e7f83;
+  --color-neutral-550: #75767a;
+  --color-neutral-500: #6b6c71;
+  --color-neutral-450: #626368;
+  --color-neutral-400: #595a5e;
+  --color-neutral-350: #505155;
+  --color-neutral-300: #46474c;
+  --color-neutral-250: #343539;
+  --color-neutral-200: #2f3034;
+  --color-neutral-150: #2a2b30;
+  --color-neutral-100: #212227;
+  --color-neutral-50: #18191e;
+  --color-neutral-0: #0f1215;
+  --color-high-contrast-purple-900: #4b0082; /* Indigo */
+  --color-high-contrast-purple-800: #8a2be2; /* BlueViolet */
+  --color-high-contrast-purple-700: #9932cc; /* DarkOrchid */
+  --color-high-contrast-magenta-900: #ff00ff; /* Magenta */
+  --color-high-contrast-magenta-800: #ff1493; /* DeepPink */
+  --color-high-contrast-magenta-700: #ff69b4; /* HotPink */
+  --color-high-contrast-orange-900: #ff4500; /* OrangeRed */
+  --color-high-contrast-orange-800: #ff6347; /* Tomato */
+  --color-high-contrast-orange-700: #ff8c00; /* DarkOrange */
+  
+  --color-high-contrast-green-900: #00ff00; /* Lime */
+  --color-high-contrast-blue-900: #1e90ff; /* DodgerBlue */
+  --color-high-contrast-yellow-900: #ffff00; /* Yellow */
+
+  --field-bg-color: var(--color-neutral-0);
+  --color-input: var(--color-neutral-0);
+
+  --color-placeholder: var(--color-high-contrast-purple-700);
+  
+  --color-background: var(--color-neutral-50);
+  --color-surface: var(--color-neutral-200);
+  --color-primary: var(--color-neutral-850);
+  --color-secondary: var(--color-neutral-600);
+  --color-error: #cf6679;
+  --color-on-primary: var(--color-neutral-250);
+  --color-on-secondary: var(--color-neutral-350);
+  --color-on-error: var(--color-neutral-50);
+  --color-on-background: var(--color-neutral-150);
+  --color-on-surface: var(--color-neutral-900);
 }
 
 body {
   background-color: var(--color-background);
+  color: var(--color-on-background);
+}
+
+button {
+  background-color: var(--color-neutral-600); // Set the button to gray
   color: var(--color-on-surface);
-  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.header, .footer {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
 }

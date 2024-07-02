@@ -5,7 +5,7 @@ body {
 }
 
 button {
-  background-color: var(--color-neutral-600); // Set the button to gray
+  background-color: var(--color-neutral-600);
   color: var(--color-on-surface);
 }
 
@@ -48,14 +48,7 @@ button {
   }
 }
 
-// .date-picker-container {
-//   display: inline-block;
-//   position: relative;
-//   z-index: 10;
-//   width: 100%; 
-//   margin: 0; 
-// }
 .date-picker-container {
   position: relative;
-  display: inline-block; // Ensure the date picker container is inline-block for proper alignment
+  display: inline-block;
 }

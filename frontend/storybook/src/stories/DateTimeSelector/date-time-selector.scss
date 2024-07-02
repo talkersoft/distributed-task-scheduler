@@ -1,6 +1,18 @@
 @import '../../../dark-theme.scss';
 
-.dateSelectContainer {
+.date-time-picker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-time-picker-label {
+  font-size: 14px;
+  color: var(--label-color);
+  user-select: var(--label-user-select);
+}
+
+.dateTimeSelectContainer {
   --display-cursor: pointer;
   --label-user-select: text;
   --field-shadow: inset 0 -1px 0 var(--color-neutral-300), inset 0 1px 4px rgba(24, 25, 30, 0.1);
@@ -29,6 +41,10 @@
     width: 1rem;
     height: 1rem;
     color: var(--color-on-surface);
+  }
+
+  &.invalid {
+    border-color: var(--color-error);
   }
 }
 
@@ -65,4 +81,26 @@
   .react-datepicker__triangle {
     display: none;
   }
+
+  .react-datepicker__time-container {
+    .react-datepicker__time {
+      background-color: var(--color-neutral-700);
+      border-left: 1px solid var(--color-neutral-600);
+    }
+    
+    .react-datepicker__time-box {
+      .react-datepicker__time-list-item {
+        &:hover {
+          background-color: var(--color-neutral-500);
+        }
+      }
+    }
+  }
+}
+
+.error-message {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  position: absolute;
+  bottom: -1.5rem;
 }
