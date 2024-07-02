@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-distributor/src/publishToRabbitMQ.ts
 import amqp from 'amqplib/callback_api';
 
 const RABBITMQ_HOST = process.env.RABBITMQ_HOST || 'localhost';

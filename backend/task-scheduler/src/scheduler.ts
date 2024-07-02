@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-scheduler/src/scheduler.ts
 import { AppDataSource, Task, ExecutionStatus } from 'task-entities';
 import { parseExpression, ParserOptions } from 'cron-parser';
 import moment, { Moment } from 'moment-timezone';

@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/storybook/src/stories/ActionButton/ActionButton.stories.ts
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { ActionButton } from './ActionButton';

@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-processor/src/apiRequest.ts
 import axios from 'axios';
 
 interface ApiResponse {

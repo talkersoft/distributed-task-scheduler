@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/App.tsx */
 import React from 'react';
 import logo from './logo.svg';
 import './App.scss';

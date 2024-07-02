@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/task-scheduler-web/src/App.tsx */
 // src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';

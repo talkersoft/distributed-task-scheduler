@@ -1,5 +1,5 @@
-@import '../../../dark-theme.scss';
-
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/stories/DateTimeSelector/date-time-selector.scss */
 .date-time-picker-container {
   display: flex;
   flex-direction: column;
@@ -13,28 +13,20 @@
 }
 
 .dateTimeSelectContainer {
-  --display-cursor: pointer;
-  --label-user-select: text;
-  --field-shadow: inset 0 -1px 0 var(--color-neutral-300), inset 0 1px 4px rgba(24, 25, 30, 0.1);
-  --label-color: var(--color-high-emphasis-text);
-  --placeholder-color: var(--color-low-emphasis-text);
-  --base-padding: 10px 12px;
-  --font-size: 14px;
-  --line-height: 20px;
-  border-radius: 4px;
-  background-color: var(--color-input);
-  padding: var(--base-padding);
   display: flex;
-  outline: 0;
-  max-width: 100%;
-  position: relative;
-  cursor: var(--display-cursor);
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background-color: var(--color-input);
   border: 1px solid var(--color-neutral-600);
+  border-radius: 4px;
   color: var(--color-on-surface);
+  cursor: var(--display-cursor);
+  height: 16px;
 
   .placeholder {
     color: var(--color-on-surface);
-    margin-right: 24px;
+    flex-grow: 1;
   }
 
   .icon {

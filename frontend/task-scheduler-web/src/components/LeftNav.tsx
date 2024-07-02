@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/task-scheduler-web/src/components/LeftNav.tsx */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './left-nav.scss';

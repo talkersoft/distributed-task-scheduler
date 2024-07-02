@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/storybook/.storybook/preview.ts
 import type { Preview } from "@storybook/react";
 
 const preview: Preview = {

@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/stories/DataGrid/DataGrid.tsx */
 import React from 'react';
 import { useTable, Column } from 'react-table';
 import './data-grid.scss';

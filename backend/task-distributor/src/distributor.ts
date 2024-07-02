@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-distributor/src/distributor.ts
 import { AppDataSource } from 'task-entities';
 import { publishToRabbitMQ } from './publishToRabbitMQ';
 

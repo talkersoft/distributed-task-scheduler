@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-scheduler-api/src/index.ts
 import "reflect-metadata";
 import express from "express";
 import cors from "cors";

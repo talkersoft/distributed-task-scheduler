@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-scheduler-api/src/controllers.ts
 import { Request, Response } from 'express';
 import { AppDataSource } from 'task-entities';
 import { TaskType, Task, TaskSchedule, ExecutionStatus, TaskDetails } from 'task-entities';

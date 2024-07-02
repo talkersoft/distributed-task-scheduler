@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/task-scheduler-web/src/views/TaskScheduler.tsx */
 // src/views/TaskScheduler.tsx
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';

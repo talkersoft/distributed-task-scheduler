@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-processor/src/processor.ts
 import { Message } from 'amqplib/callback_api';
 import { connectToRabbitMQ, createChannelWithRetry, setupQueueWithRetry } from './rabbitmq';
 import { makeReminderApiRequest, makeNotificationApiRequest, ApiResponse } from './apiRequest';

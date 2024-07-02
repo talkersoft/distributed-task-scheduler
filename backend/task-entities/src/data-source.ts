@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-entities/src/data-source.ts
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { TaskType } from "./entity/TaskType";

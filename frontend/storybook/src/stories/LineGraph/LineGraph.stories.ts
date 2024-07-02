@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/storybook/src/stories/LineGraph/LineGraph.stories.ts
 // stories/LineGraph/LineGraph.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import LineGraph from './LineGraph';

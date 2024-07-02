@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/storybook/src/stories/Page/Page.stories.ts
 import type { Meta, StoryObj } from '@storybook/react';
 import { within, userEvent, expect } from '@storybook/test';
 

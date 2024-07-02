@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/task-scheduler-web/src/redux/store.ts
 // src/redux/store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import tasksReducer from './taskSlice';

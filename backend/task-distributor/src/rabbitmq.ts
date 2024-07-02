@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-distributor/src/rabbitmq.ts
 import amqp from 'amqplib/callback_api';
 
 const RETRY_INTERVAL = 5000;

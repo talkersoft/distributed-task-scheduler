@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/storybook/src/stories/TextInput/TextInput.stories.ts
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { TextInput } from './TextInput';

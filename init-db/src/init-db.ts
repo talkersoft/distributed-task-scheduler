@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /init-db/src/init-db.ts
 import { Client } from 'pg';
 import { readFileSync } from 'fs';
 import { join } from 'path';

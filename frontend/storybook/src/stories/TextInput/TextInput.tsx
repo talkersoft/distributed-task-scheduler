@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/stories/TextInput/TextInput.tsx */
 import React, { useState, useEffect } from 'react';
 import './text-input.scss';
 

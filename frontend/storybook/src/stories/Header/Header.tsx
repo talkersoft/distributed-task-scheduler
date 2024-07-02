@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/stories/Header/Header.tsx */
 import React from 'react';
 
 import { ActionButton } from '../ActionButton/ActionButton';

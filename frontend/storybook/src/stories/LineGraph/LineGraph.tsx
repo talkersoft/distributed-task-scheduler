@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/stories/LineGraph/LineGraph.tsx */
 // stories/LineGraph/LineGraph.tsx
 import React from 'react';
 import {

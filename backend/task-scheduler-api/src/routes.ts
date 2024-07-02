@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-scheduler-api/src/routes.ts
 import { Router } from 'express';
 import { getTaskTypes, createTask, getTasks, healthCheck, setInactive, editTask, getScheduledTasksSummary } from './controllers';
 

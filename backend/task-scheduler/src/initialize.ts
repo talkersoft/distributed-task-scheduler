@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-scheduler/src/initialize.ts
 import { AppDataSource } from 'task-entities';
 import { scheduleTasks } from './scheduler';
 

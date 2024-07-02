@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/storybook/src/stories/DataGrid/DataGrid.stories.ts
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { DataGrid } from './DataGrid';

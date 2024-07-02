@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/task-scheduler-web/src/components/ListTasks.tsx */
 // src/components/ListTasks.tsx
 import React from 'react';
 import { useTable, Column, CellProps } from 'react-table';

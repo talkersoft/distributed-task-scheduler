@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/task-scheduler-web/src/reportWebVitals.ts
 import { ReportHandler } from 'web-vitals';
 
 const reportWebVitals = (onPerfEntry?: ReportHandler) => {

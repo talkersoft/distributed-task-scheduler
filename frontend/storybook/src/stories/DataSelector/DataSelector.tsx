@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/stories/DataSelector/DataSelector.tsx */
 import React, { useEffect, useState, useRef } from 'react';
 import './data-selector.scss';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';

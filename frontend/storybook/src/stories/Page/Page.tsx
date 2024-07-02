@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/src/stories/Page/Page.tsx */
 import React from 'react';
 
 import { Header } from '../Header/Header';

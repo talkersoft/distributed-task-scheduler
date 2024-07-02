@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/task-scheduler-web/src/react-app-env.d.ts
 /// <reference types="node" />
 /// <reference types="react" />
 /// <reference types="react-dom" />

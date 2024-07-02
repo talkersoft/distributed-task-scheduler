@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/storybook/src/stories/DateTimeSelector/DateTimeSelector.stories.ts
 import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { DateTimeSelector, DateTimeSelectorProps } from './DateTimeSelector';

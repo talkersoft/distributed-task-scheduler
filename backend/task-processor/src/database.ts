@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-processor/src/database.ts
 import { AppDataSource, TaskSchedule, ExecutionStatus } from 'task-entities';
 import { Repository } from 'typeorm';
 

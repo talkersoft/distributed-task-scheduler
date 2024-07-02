@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/storybook/dark-theme.scss */
 :root {
   --color-neutral-900: #f4f4f7;
   --color-neutral-850: #e8e8eb;
@@ -32,6 +34,7 @@
   --color-high-contrast-blue-900: #1e90ff; /* DodgerBlue */
   --color-high-contrast-yellow-900: #ffff00; /* Yellow */
 
+  --spinner-bg-color: var(--color-high-contrast-purple-900);
   --field-bg-color: var(--color-neutral-0);
   --color-input: var(--color-neutral-0);
 

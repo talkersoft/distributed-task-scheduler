@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-entities/src/entity/TaskSchedule.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Task } from "./Task";
 

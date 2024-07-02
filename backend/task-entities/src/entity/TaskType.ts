@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-entities/src/entity/TaskType.ts
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity("task_types")
