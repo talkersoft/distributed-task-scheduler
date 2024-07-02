@@ -91,11 +91,12 @@ export const getTasks = async (req: Request, res: Response) => {
                 id: task.id,
                 name: task.name,
                 task_type: task.taskType.name,
+                task_type_id: task.taskType.id,
                 cron_expression: task.cron_expression,
                 message: taskDetails.message,
                 next_runtime: nextRuntime,
                 time_zone: task.time_zone,
-                is_reccuring: task.is_recurring,
+                is_recurring: task.is_recurring,
                 scheduled_execution_time: task.scheduled_execution_time
             };
         });

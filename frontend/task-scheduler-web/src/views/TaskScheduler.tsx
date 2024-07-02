@@ -1,4 +1,3 @@
-// src/views/TaskScheduler.tsx
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { fetchTasks } from '../redux/taskSlice';
 import { fetchTaskTypes } from '../redux/taskTypeSlice';
 import { RootState, AppDispatch } from '../redux/store';
 import './task-scheduler.scss';
+import { ActionButton } from 'storybook/src/stories/ActionButton/ActionButton';
 
 const TaskScheduler = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,12 +35,16 @@ const TaskScheduler = () => {
   };
 
   return (
-    <div className="task-scheduler">
-      <button onClick={handleCreateTask}>Create Task</button>
-      {taskStatus === 'loading' && <div>Loading...</div>}
-      {taskStatus === 'succeeded' && <ListTasks tasks={tasks} onEdit={handleEditTask} />}
-      {taskStatus === 'failed' && <div>{error}</div>}
-    </div>
+    <>
+      <div className="action-button-container">
+        <ActionButton label="Create New Task" onClick={handleCreateTask} primary={true} size="large" />
+      </div>
+      <div className="task-scheduler">
+        {taskStatus === 'loading' && <div>Loading...</div>}
+        {taskStatus === 'succeeded' && <ListTasks tasks={tasks} onEdit={handleEditTask} />}
+        {taskStatus === 'failed' && <div>{error}</div>}
+      </div>
+    </>
   );
 };
 

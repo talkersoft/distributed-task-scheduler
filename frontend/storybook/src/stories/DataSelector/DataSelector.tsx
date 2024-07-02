@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './data-selector.scss';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
@@ -12,9 +12,11 @@ interface DataSelectorProps {
   placeholder?: string;
   selected?: string;
   onChange?: (item: Item) => void;
+  label: string;
 }
 
 const DataSelector: React.FC<DataSelectorProps> = ({
+  label,
   items,
   placeholder = 'Select an item',
   selected,
@@ -23,6 +25,10 @@ const DataSelector: React.FC<DataSelectorProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item | undefined>(items.find(item => item.key === selected));
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setSelectedItem(items.find(item => item.key === selected));
+  }, [items, selected]);
 
   const handleToggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -49,6 +55,7 @@ const DataSelector: React.FC<DataSelectorProps> = ({
 
   return (
     <div className="data-select-container" ref={containerRef}>
+      <label className="text-input-label">{label}</label>
       <div className="selected-item" onClick={handleToggleDropdown}>
         <div className="placeholder">{selectedItem?.value || placeholder}</div>
         <ChevronDownIcon className="icon" />

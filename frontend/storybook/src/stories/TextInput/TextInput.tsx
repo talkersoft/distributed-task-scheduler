@@ -6,9 +6,9 @@ interface TextInputProps {
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
-  validate?: (value: string) => boolean;
   errorMessage?: string;
-  disabled?: boolean; // Added disabled prop
+  isValid?: boolean;
+  disabled?: boolean;
 }
 
 export const TextInput = ({
@@ -16,19 +16,18 @@ export const TextInput = ({
   placeholder = '',
   value: initialValue = '',
   onChange,
-  validate,
-  errorMessage = 'Invalid input',
-  disabled = false, // Default value for disabled prop
+  errorMessage,
+  isValid = true,
+  disabled = false,
 }: TextInputProps) => {
   const [value, setValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(true);
-  const [isTouched, setIsTouched] = useState(false);
+  const [currentErrorMessage, setCurrentErrorMessage] = useState(errorMessage);
+  const [currentIsValid, setCurrentIsValid] = useState(isValid);
 
   useEffect(() => {
-    if (validate && isTouched) {
-      setIsValid(validate(value));
-    }
-  }, [value, validate, isTouched]);
+    setCurrentErrorMessage(errorMessage);
+    setCurrentIsValid(isValid);
+  }, [errorMessage, isValid]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -36,23 +35,20 @@ export const TextInput = ({
     if (onChange) {
       onChange(newValue);
     }
-    if (!isTouched) {
-      setIsTouched(true);
-    }
   };
 
   return (
-    <div className={`text-input-container ${!isValid && isTouched ? 'invalid' : ''}`}>
+    <div className="text-input-container">
       <label className="text-input-label">{label}</label>
       <input
         type="text"
-        className={`text-input ${!isValid && isTouched ? 'invalid' : ''}`}
+        className={`text-input ${!currentIsValid ? 'invalid' : ''}`}
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
-        disabled={disabled} // Apply disabled prop
+        disabled={disabled}
       />
-      {!isValid && isTouched && <span className="error-message">{errorMessage}</span>}
+      {!currentIsValid && currentErrorMessage && <span className="error-message">{currentErrorMessage}</span>}
     </div>
   );
 };

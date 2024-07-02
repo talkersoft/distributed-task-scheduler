@@ -1,3 +1,4 @@
+// src/components/Content.tsx
 import React from 'react';
 import './content.scss';
 

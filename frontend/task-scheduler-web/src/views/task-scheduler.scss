@@ -1,7 +1,18 @@
+// src/views/task-scheduler.scss
 @import '../dark-theme.scss';
 
 .task-scheduler {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.action-button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
+.action-button-container .storybook-button {
+  width: auto; /* Ensure the button does not take the full width */
 }

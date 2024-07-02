@@ -48,3 +48,15 @@ export const TimeZoneDefault: Story = {
     selected: moment.tz.guess(),
   },
 };
+
+export const DefaultSelected: Story = {
+  args: {
+    items: [
+      { key: 'item1', value: 'Item 1' },
+      { key: 'item2', value: 'Item 2' },
+      { key: 'item3', value: 'Item 3' },
+    ],
+    placeholder: 'Select an item',
+    selected: 'item2',
+  },
+};

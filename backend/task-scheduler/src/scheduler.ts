@@ -21,6 +21,7 @@ async function scheduleTasks(config: { scheduleInterval: number }) {
                 AND ts.scheduled_time < '${todayEndUTC.format('YYYY-MM-DD HH:mm:ss')}'
             WHERE ts.id IS NULL
                 AND t.is_recurring = true
+                AND t.active = true
         `);
 
         for (const task of recurringTasks) {

@@ -9,6 +9,7 @@ const meta: Meta<typeof RadioOptions> = {
     options: { control: { type: 'object' } },
     direction: { control: { type: 'radio', options: ['vertical', 'horizontal'] } },
     onChange: { action: 'changed' },
+    value: { control: { type: 'text' } },
   },
 };
 
@@ -18,14 +19,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Vertical: Story = {
   args: {
-    options: ['Immediately', 'Recurring', 'Specific Time'],
+    options: ['Immediately', 'Recurring', 'Schedule'],
     direction: 'vertical',
+    value: 'Recurring',
   },
 };
 
 export const Horizontal: Story = {
   args: {
-    options: ['Immediately', 'Recurring', 'Specific Time'],
+    options: ['Immediately', 'Recurring', 'Schedule'],
     direction: 'horizontal',
+    value: 'Recurring',
   },
 };

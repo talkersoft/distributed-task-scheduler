@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTable, Column, CellProps } from 'react-table';
+import { useTable, Column } from 'react-table';
 import './data-grid.scss';
 
 interface DataGridProps<T extends object> {

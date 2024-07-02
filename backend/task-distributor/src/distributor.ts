@@ -22,6 +22,7 @@ async function distributeTasks(config: DistributorConfig) {
       JOIN task_types tt ON tt.id = t.task_type_id
       WHERE ts.scheduled_time <= $1
       AND ts.status = 'Scheduled'
+      AND t.active = true
       ORDER BY ts.scheduled_time;
     `;
 

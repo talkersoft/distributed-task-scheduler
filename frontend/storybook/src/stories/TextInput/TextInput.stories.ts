@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { TextInput } from './TextInput';
-import { isValidCron } from 'cron-validator';
 
 const meta = {
   title: 'Components/Text Input',
@@ -15,6 +14,7 @@ const meta = {
     placeholder: { control: 'text' },
     value: { control: 'text' },
     errorMessage: { control: 'text' },
+    isValid: { control: 'boolean' },
   },
   args: {
     onChange: fn(),
@@ -35,7 +35,7 @@ export const WithValidation: Story = {
   args: {
     label: 'Validated Input',
     placeholder: 'Enter text...',
-    validate: (value: string) => value.length >= 5,
+    isValid: false,
     errorMessage: 'Input must be at least 5 characters long',
   },
 };
@@ -44,7 +44,7 @@ export const CronValidation: Story = {
   args: {
     label: 'Cron Expression Input',
     placeholder: 'Enter cron expression...',
-    validate: (value: string) => isValidCron(value, { alias: true }),
+    isValid: false,
     errorMessage: 'Invalid cron expression',
   },
 };

@@ -32,6 +32,9 @@ export class Task {
     is_recurring!: boolean;
 
     @Column()
+    active!: boolean;
+
+    @Column()
     time_zone!: string;
 
     @Column()

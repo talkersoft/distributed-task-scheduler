@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS tasks (
   scheduled_execution_time TIMESTAMP,
   is_recurring BOOLEAN DEFAULT FALSE,
   time_zone VARCHAR(255),
-  task_created TIMESTAMP NOT NULL
+  task_created TIMESTAMP NOT NULL,
+  active BOOLEAN DEFAULT TRUE
 );
 
 CREATE INDEX IF NOT EXISTS idx_tasks_scheduled_execution_time ON tasks(scheduled_execution_time);
@@ -74,8 +75,10 @@ WHERE
     ts.start_time IS NOT NULL
     AND ts.end_time IS NOT NULL
     AND ts.scheduled_time >= NOW() - INTERVAL '1 YEAR'
+    AND t.active = TRUE
 GROUP BY
     tt.id, tt.name;
+
 
 CREATE OR REPLACE VIEW scheduled_tasks_summary AS
 WITH ScheduledTasks AS (
@@ -95,6 +98,7 @@ WITH ScheduledTasks AS (
         average_elapsed_time_per_task_type aet ON tt.id = aet.task_type_id
     WHERE
         ts.status = 'Scheduled'
+        AND t.active = TRUE
     GROUP BY
         tt.id, tt.name, ts.scheduled_time
 ),

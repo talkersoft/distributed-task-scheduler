@@ -41,8 +41,37 @@ const mockData = [
   }
 ];
 
+const columns = [
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
+  {
+    Header: 'Task Type',
+    accessor: 'task_type',
+  },
+  {
+    Header: 'Cron Expression',
+    accessor: 'cron_expression',
+  },
+  {
+    Header: 'Message',
+    accessor: 'message',
+  },
+  {
+    Header: 'Next Runtime',
+    accessor: 'next_runtime',
+  },
+  {
+    Header: 'Time Zone',
+    accessor: 'time_zone',
+  },
+];
+
 export const Default: Story = {
   args: {
     data: mockData,
+    columns: columns,
+    onEdit: (row) => console.log('Edit row', row),
   },
 };
