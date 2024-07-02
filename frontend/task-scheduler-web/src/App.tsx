@@ -14,7 +14,6 @@ const App = () => {
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Task Scheduler', path: '/task-scheduler' },
-    { name: 'Logs', path: '/logs' },
     { name: 'Monitor', path: '/monitor' },
   ];
 

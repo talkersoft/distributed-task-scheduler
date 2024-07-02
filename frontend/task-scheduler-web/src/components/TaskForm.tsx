@@ -188,14 +188,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
             />
           </div>
         )}
-        <div className="form-section">
-          <TextInput
-            label="Task Message"
-            placeholder="Enter task message"
-            value={message}
-            onChange={setMessage}
-          />
-        </div>
         {selectedScheduleType === 'Recurring' && (
           <div className="form-section">
             <TextInput
@@ -212,6 +204,15 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
             />
           </div>
         )}
+        <div className="form-section">
+          <TextInput
+            label="Task Message"
+            placeholder="Enter task message"
+            value={message}
+            onChange={setMessage}
+          />
+        </div>
+
         <div className="form-section task-form-buttons">
           <ActionButton label="Cancel" onClick={onCancel} primary={false} size="large" />
           <ActionButton label="Save" onClick={handleSave} primary={true} size="large" />

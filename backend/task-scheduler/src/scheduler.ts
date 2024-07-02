@@ -19,6 +19,7 @@ async function scheduleTasks(config: { scheduleInterval: number }) {
             LEFT JOIN task_schedule ts ON t.id = ts.task_id 
                 AND ts.scheduled_time >= '${todayStartUTC.format('YYYY-MM-DD HH:mm:ss')}' 
                 AND ts.scheduled_time < '${todayEndUTC.format('YYYY-MM-DD HH:mm:ss')}'
+                AND ts.status = 'Scheduled'
             WHERE ts.id IS NULL
                 AND t.is_recurring = true
                 AND t.active = true

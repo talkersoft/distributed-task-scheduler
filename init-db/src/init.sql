@@ -128,7 +128,7 @@ ORDER BY
     at.scheduled_time;
 
 INSERT INTO configuration (key, value)
-VALUES ('number_of_instances', '3')
+VALUES ('number_of_instances', '1')
 ON CONFLICT (key) DO NOTHING;
 
 DO $$ 

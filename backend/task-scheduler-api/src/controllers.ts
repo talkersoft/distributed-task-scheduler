@@ -145,30 +145,40 @@ export const setInactive = async (req: Request, res: Response) => {
 
 export const editTask = async (req: Request, res: Response) => {
     const { taskId } = req.params;
-    const { task_type_id, name, cron_expression, task_details, scheduled_execution_time, is_recurring, message, time_zone } = req.body;
+    const {
+      task_type_id,
+      name,
+      cron_expression,
+      task_details,
+      scheduled_execution_time,
+      is_recurring,
+      message,
+      time_zone,
+    } = req.body;
+  
     try {
         const taskRepository = AppDataSource.getRepository(Task);
         const taskTypeRepository = AppDataSource.getRepository(TaskType);
         const taskScheduleRepository = AppDataSource.getRepository(TaskSchedule);
-
+  
         const task = await taskRepository.findOneBy({ id: taskId });
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
-
+  
         const taskType = await taskTypeRepository.findOneBy({ id: task_type_id });
         if (!taskType) {
             return res.status(400).json({ message: 'Invalid task type ID' });
         }
-
-        await taskScheduleRepository.delete({ task: task, start_time: IsNull() });
-
+  
+        await taskScheduleRepository.delete({ task: task, start_time: IsNull(), status: ExecutionStatus.Scheduled });
+  
         task.taskType = taskType;
         task.name = name;
         task.task_details = { ...task_details, message };
         task.is_recurring = is_recurring;
         task.time_zone = time_zone;
-
+  
         if (is_recurring) {
             task.cron_expression = cron_expression;
             task.scheduled_execution_time = undefined;
@@ -176,18 +186,18 @@ export const editTask = async (req: Request, res: Response) => {
             task.scheduled_execution_time = moment.utc(scheduled_execution_time || moment.utc()).toDate();
             task.cron_expression = undefined;
         }
-
+  
         await taskRepository.save(task);
-
-        if (!is_recurring) {
+  
+        if (!is_recurring && task.scheduled_execution_time) {
             const taskSchedule = new TaskSchedule();
             taskSchedule.task = task;
-            taskSchedule.scheduled_time = task.scheduled_execution_time!;
+            taskSchedule.scheduled_time = task.scheduled_execution_time;
             taskSchedule.status = ExecutionStatus.Scheduled;
-
+  
             await taskScheduleRepository.save(taskSchedule);
         }
-
+  
         res.status(200).json(formatTaskResponse(task));
     } catch (error) {
         console.error('Error editing task:', error);
@@ -196,6 +206,7 @@ export const editTask = async (req: Request, res: Response) => {
     }
 };
 
+
 export const healthCheck = (req: Request, res: Response) => {
     res.status(200).json({ message: 'Healthy' });
 };
@@ -203,7 +214,7 @@ export const healthCheck = (req: Request, res: Response) => {
 export const getScheduledTasksSummary = async (req: Request, res: Response) => {
     try {
         const query = `
-            SELECT sts.*, c.value as number_of_instances
+            SELECT sts.*
             FROM scheduled_tasks_summary sts
             JOIN configuration c ON c.key = 'number_of_instances';
         `;
