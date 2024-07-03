@@ -2,7 +2,7 @@
 /* /frontend/task-scheduler-web/src/components/ListTasks.tsx */
 // src/components/ListTasks.tsx
 import React from 'react';
-import { useTable, Column, CellProps } from 'react-table';
+import { Column, CellProps } from 'react-table';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { DataGrid } from 'storybook/src/stories/DataGrid/DataGrid';
 import './list-tasks.scss';

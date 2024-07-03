@@ -49,13 +49,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
     return 'Immediately';
   };
 
-  useEffect(() => {
-    const initialScheduleType = determineScheduleType(task);
-    setInitialScheduleType(initialScheduleType);
-    setSelectedScheduleType(initialScheduleType);
-  }, [task]);
 
-  const [initialScheduleType, setInitialScheduleType] = useState(determineScheduleType(task));
   const [selectedScheduleType, setSelectedScheduleType] = useState(determineScheduleType(task));
 
   useEffect(() => {

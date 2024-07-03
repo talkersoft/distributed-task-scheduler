@@ -16,7 +16,6 @@ const TaskScheduler = () => {
   const navigate = useNavigate();
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const taskStatus = useSelector((state: RootState) => state.tasks.status);
-  const taskTypes = useSelector((state: RootState) => state.taskTypes.taskTypes);
   const taskTypesStatus = useSelector((state: RootState) => state.taskTypes.status);
   const error = useSelector((state: RootState) => state.tasks.error);
 

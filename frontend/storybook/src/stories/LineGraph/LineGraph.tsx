@@ -10,7 +10,7 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
-    ReferenceLine,
+    ReferenceLine as RechartsReferenceLine,
 } from 'recharts';
 import './line-graph.scss';
 
@@ -29,6 +29,29 @@ const formatXAxis = (tickItem: string) => {
     return new Date(tickItem).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
+const XAxisComponent: React.FC<{
+    dataKey?: string;
+    tickFormatter?: (tickItem: string) => string;
+    stroke?: string;
+}> = ({ dataKey = 'scheduled_time', tickFormatter = formatXAxis, stroke = '#aaa', ...props }) => (
+    <XAxis dataKey={dataKey} tickFormatter={tickFormatter} stroke={stroke} {...props} />
+);
+
+const YAxisComponent: React.FC<{
+    dataKey?: string;
+    stroke?: string;
+}> = ({ dataKey = 'required_instances', stroke = '#aaa', ...props }) => (
+    <YAxis dataKey={dataKey} stroke={stroke} {...props} />
+);
+
+const ReferenceLineComponent: React.FC<{
+    y?: number;
+    label?: string;
+    stroke?: string;
+}> = ({ y = 0, label = '', stroke = 'red', ...props }) => (
+    <RechartsReferenceLine y={y} label={label} stroke={stroke} {...props} />
+);
+
 const LineGraph: React.FC<LineGraphProps> = ({ data, thresholdLabel, thresholdValue }) => {
     return (
         <LineChart
@@ -39,11 +62,11 @@ const LineGraph: React.FC<LineGraphProps> = ({ data, thresholdLabel, thresholdVa
             className="line-graph"
         >
             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-            <XAxis dataKey="scheduled_time" tickFormatter={formatXAxis} stroke="#aaa" />
-            <YAxis dataKey="required_instances" stroke="#aaa" />
+            <XAxisComponent />
+            <YAxisComponent />
             <Tooltip contentStyle={{ backgroundColor: "#333", borderColor: "#aaa" }} />
             <Legend />
-            <ReferenceLine y={thresholdValue} label={thresholdLabel} stroke="red" />
+            <ReferenceLineComponent y={thresholdValue} label={thresholdLabel} />
             <Line type="monotone" dataKey="required_instances" stroke="#8884d8" />
         </LineChart>
     );
