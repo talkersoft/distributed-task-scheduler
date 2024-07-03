@@ -228,3 +228,22 @@ export const getScheduledTasksSummary = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal Server Error', error: errorMessage });
     }
 };
+
+export const getTaskSummary = async (req: Request, res: Response) => {
+    try {
+        const query = `
+            SELECT 
+                task_type_id,
+                task_type_name,
+                average_elapsed_time
+            FROM 
+                average_elapsed_time_per_task_type
+        `;
+        const result = await AppDataSource.query(query);
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching task summary:', error);
+        const errorMessage = isErrorWithMessage(error) ? error.message : 'Internal Server Error';
+        res.status(500).json({ message: 'Internal Server Error', error: errorMessage });
+    }
+};

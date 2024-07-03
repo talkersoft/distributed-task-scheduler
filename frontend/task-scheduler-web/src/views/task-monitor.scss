@@ -1,0 +1,43 @@
+// /frontend/task-scheduler-web/src/views/task-monitor.scss
+
+.task-monitor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #333;
+  color: #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+  }
+
+  .line-graph {
+    width: 100%;
+    max-width: 1000px;
+
+    .recharts-wrapper {
+      margin: 0 auto;
+    }
+
+    .recharts-cartesian-axis-tick-value {
+      fill: #ccc;
+    }
+
+    .recharts-tooltip-label {
+      color: #ccc;
+    }
+
+    .recharts-tooltip-item-list .recharts-tooltip-item {
+      color: #888;
+    }
+
+    .recharts-legend-item-text {
+      color: #ccc;
+    }
+  }
+}

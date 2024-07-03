@@ -9,6 +9,7 @@ import Home from './views/Home';
 import TaskScheduler from './views/TaskScheduler';
 import TaskSchedulerEdit from './views/TaskSchedulerEdit';
 import TaskSchedulerCreate from './views/TaskSchedulerCreate';
+import TaskMonitor from './views/TaskMonitor';
 import LeftNav from './components/LeftNav';
 import Content from './components/Content';
 
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/task-scheduler" element={<TaskScheduler />} />
             <Route path="/task-scheduler/edit/:id" element={<TaskSchedulerEdit />} />
             <Route path="/task-scheduler/create" element={<TaskSchedulerCreate />} />
+            <Route path="/monitor" element={<TaskMonitor />} />
           </Routes>
         </Content>
       </>

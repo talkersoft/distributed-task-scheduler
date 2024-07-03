@@ -130,7 +130,7 @@ ORDER BY
     at.scheduled_time;
 
 INSERT INTO configuration (key, value)
-VALUES ('number_of_instances', '1')
+VALUES ('number_of_instances', '3')
 ON CONFLICT (key) DO NOTHING;
 
 DO $$ 
@@ -142,12 +142,10 @@ BEGIN
     INSERT INTO tasks (name, task_type_id, cron_expression, task_details, is_recurring, time_zone, task_created)
     VALUES 
     ('Task 1', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 2', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
     ('Task 3', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Book a flight"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
     ('Task 4', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/10 * * * *', '{"message": "Walk the dog"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 5', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/15 * * * *', '{"message": "Feed the cat"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 6', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 7', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '0 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC');
+    ('Task 5', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/30 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
+    ('Task 6', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '0 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC');
 
   END IF;
 END $$;

@@ -14,12 +14,13 @@ const defaultConfig: SchedulerConfig = {
     scheduleInterval: parseInt(process.env.SCHEDULE_INTERVAL || '60000', 10),
 };
 
-function getTimeUntilMidnight() {
+function getTimeUntilMidnightUTC() {
     const now = new Date();
-    const nextMidnight = new Date();
-    nextMidnight.setDate(now.getDate() + 1);
-    nextMidnight.setHours(0, 0, 0, 0);
-    return nextMidnight.getTime() - now.getTime();
+    const nowUTC = new Date(now.toISOString().slice(0, -1));
+    const nextMidnightUTC = new Date(nowUTC);
+    nextMidnightUTC.setUTCDate(nowUTC.getUTCDate() + 1);
+    nextMidnightUTC.setUTCHours(0, 0, 0, 0);
+    return nextMidnightUTC.getTime() - nowUTC.getTime();
 }
 
 async function initializeScheduler(config: SchedulerConfig = defaultConfig, retries = 0) {
@@ -28,13 +29,15 @@ async function initializeScheduler(config: SchedulerConfig = defaultConfig, retr
         console.log('Data Source has been initialized!');
         console.log(`Scheduling tasks to run every ${config.scheduleInterval / 1000} seconds.`);
 
+        
         setInterval(() => scheduleTasks(config), config.scheduleInterval);
 
-        const timeUntilMidnight = getTimeUntilMidnight();
-        setTimeout(function scheduleMidnight() {
+        // We must run at utc midnight to start schduling for the next day.
+        const timeUntilMidnightUTC = getTimeUntilMidnightUTC();
+        setTimeout(function scheduleMidnightUTC() {
             scheduleTasks(config);
-            setTimeout(scheduleMidnight, 24 * 60 * 60 * 1000);
-        }, timeUntilMidnight);
+            setTimeout(scheduleMidnightUTC, 24 * 60 * 60 * 1000);
+        }, timeUntilMidnightUTC);
 
     } catch (err) {
         if (retries < MAX_RETRIES) {

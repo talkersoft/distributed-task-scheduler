@@ -17,12 +17,16 @@ export interface Task {
 
 interface TaskState {
   tasks: Task[];
+  scheduledTasksSummary: any[];
+  taskSummary: any[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
 
 const initialState: TaskState = {
   tasks: [],
+  scheduledTasksSummary: [],
+  taskSummary: [],
   status: 'idle',
   error: null,
 };
@@ -30,6 +34,16 @@ const initialState: TaskState = {
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
   return (await response.json()) as Task[];
+});
+
+export const fetchScheduledTasksSummary = createAsyncThunk('tasks/fetchScheduledTasksSummary', async () => {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/scheduled-tasks-summary`);
+  return (await response.json());
+});
+
+export const fetchTaskSummary = createAsyncThunk('tasks/fetchTaskSummary', async () => {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/task-summary`);
+  return (await response.json());
 });
 
 export const createTask = createAsyncThunk('tasks/createTask', async (task: Task) => {
@@ -70,6 +84,28 @@ const tasksSlice = createSlice({
         state.tasks = action.payload;
       })
       .addCase(fetchTasks.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || null;
+      })
+      .addCase(fetchScheduledTasksSummary.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchScheduledTasksSummary.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.scheduledTasksSummary = action.payload;
+      })
+      .addCase(fetchScheduledTasksSummary.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || null;
+      })
+      .addCase(fetchTaskSummary.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchTaskSummary.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.taskSummary = action.payload;
+      })
+      .addCase(fetchTaskSummary.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || null;
       })

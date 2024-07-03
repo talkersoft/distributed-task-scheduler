@@ -1,7 +1,7 @@
 // Copyright Talkersoft LLC
 // /backend/task-scheduler-api/src/routes.ts
 import { Router } from 'express';
-import { getTaskTypes, createTask, getTasks, healthCheck, setInactive, editTask, getScheduledTasksSummary } from './controllers';
+import { getTaskTypes, createTask, getTasks, healthCheck, setInactive, editTask, getScheduledTasksSummary, getTaskSummary } from './controllers';
 
 const router = Router();
 
@@ -186,5 +186,16 @@ router.get("/health", healthCheck);
  *         description: A summary of scheduled tasks
  */
 router.get("/scheduled-tasks-summary", getScheduledTasksSummary);
+
+/**
+ * @swagger
+ * /task-summary:
+ *   get:
+ *     summary: Retrieve the average elapsed time per task type
+ *     responses:
+ *       200:
+ *         description: Average elapsed time per task type
+ */
+router.get("/task-summary", getTaskSummary);
 
 export default router;
