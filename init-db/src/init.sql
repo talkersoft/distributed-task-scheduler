@@ -133,19 +133,27 @@ INSERT INTO configuration (key, value)
 VALUES ('number_of_instances', '3')
 ON CONFLICT (key) DO NOTHING;
 
+
 DO $$ 
 DECLARE 
   tasks_count INT;
+  notification_task_id UUID;
+  reminder_task_id UUID;
 BEGIN
   SELECT COUNT(*) INTO tasks_count FROM tasks;
   IF tasks_count = 0 THEN
     INSERT INTO tasks (name, task_type_id, cron_expression, task_details, is_recurring, time_zone, task_created)
     VALUES 
-    ('Task 1', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 1', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), '*/1 * * * *', '{"message": "Update Software"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 3', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/5 * * * *', '{"message": "Book a flight"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 4', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/10 * * * *', '{"message": "Walk the dog"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 5', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '*/30 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC'),
-    ('Task 6', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), '0 * * * *', '{"message": "Water the plants"}', TRUE, 'America/New_York', now() AT TIME ZONE 'UTC');
+        ('Task 1', (SELECT id FROM task_types WHERE name = 'notification' LIMIT 1), NULL, '{"message": "Update Software"}', false, 'America/New_York', now() AT TIME ZONE 'UTC')
+    RETURNING id INTO notification_task_id;
+
+    INSERT INTO tasks (name, task_type_id, cron_expression, task_details, is_recurring, time_zone, task_created)
+    VALUES 
+        ('Task 2', (SELECT id FROM task_types WHERE name = 'reminder' LIMIT 1), NULL, '{"message": "Update Software"}', false, 'America/New_York', now() AT TIME ZONE 'UTC')
+    RETURNING id INTO reminder_task_id;
+
+    INSERT INTO task_schedule (task_id, scheduled_time, status) VALUES 
+        (notification_task_id, now() AT TIME ZONE 'UTC', 'Scheduled'),
+        (reminder_task_id, now() AT TIME ZONE 'UTC', 'Scheduled');
   END IF;
 END $$;

@@ -8,7 +8,7 @@ const Home = () => {
       <h1>Task Executor</h1>
       <p>We execute stuff really fast.</p>
       <i style={{ color: 'red' }}>
-        Please note, Monitor and Metrics need to gather data about past run jobs, sample data added to the system should start to process one minute after running the containers.
+        Please note, Monitor will not show any data until recurring tasks are scheduled.
       </i>
     </div>
   );
