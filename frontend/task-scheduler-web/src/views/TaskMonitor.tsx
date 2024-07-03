@@ -34,7 +34,7 @@ const TaskMonitor = () => {
       <h1>Task Monitor</h1>
       <LineGraph 
         data={filteredData} 
-        thresholdLabel="Current Instances" 
+        thresholdLabel="Available Instances" 
         thresholdValue={currentInstances} 
       />
     </div>
