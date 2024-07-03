@@ -16,5 +16,5 @@ RUN yarn workspace task-processor run build
 
 EXPOSE 9226
 
-# CMD ["yarn", "workspace", "task-processor", "run", "start"]
-CMD ["yarn", "workspace", "task-processor", "run", "debug"]
+CMD ["yarn", "workspace", "task-processor", "run", "start"]
+# CMD ["yarn", "workspace", "task-processor", "run", "debug"]

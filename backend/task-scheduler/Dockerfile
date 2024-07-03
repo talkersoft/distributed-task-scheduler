@@ -15,6 +15,6 @@ RUN yarn workspace task-scheduler run build
 
 
 EXPOSE 9229
-# CMD ["yarn", "workspace", "task-scheduler", "run", "start"]
-CMD ["yarn", "workspace", "task-scheduler", "run", "debug"]
+CMD ["yarn", "workspace", "task-scheduler", "run", "start"]
+# CMD ["yarn", "workspace", "task-scheduler", "run", "debug"]
 

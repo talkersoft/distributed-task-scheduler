@@ -1,57 +1,82 @@
-# Distributed Task Scheduler
+# Task Scheduler Project
+
+## Overview
+This project sets up a task scheduler system using Docker and Docker Compose. It includes multiple services such as PostgreSQL, RabbitMQ, and various task processing components.
 
 ## Prerequisites
+- Docker
+- Docker Compose
+- Git
 
-Ensure you have the following installed on your local machine:
+## Services
+- **PostgreSQL**: Database service.
+- **RabbitMQ**: Message broker service with management UI.
+- **init-db**: Initializes the PostgreSQL database.
+- **task-scheduler-api**: API for the task scheduler.
+- **task-scheduler**: Main task scheduler service.
+- **task-distributor**: Distributes tasks to processors.
+- **task-processor-1, task-processor-2, task-processor-3**: Task processing services.
 
-1. **Docker**: To run PostgreSQL and other services in containers.
-2. **Docker Compose**: To orchestrate multiple Docker containers.
-3. **Node.js and npm**: To install dependencies.
+## Docker Compose Setup
+The `docker-compose.yml` file defines all the services and their configurations. The following sections describe each service and its environment variables.
 
-## Setup Instructions
+## Volumes
+- **postgres_data**: Persistent storage for PostgreSQL data.
 
-### 1. Clone the Repository
+## Scripts
+- **scripts/app-run.sh**: Builds and starts the Docker containers.
+- **scripts/re-yarn.sh**: Installs and builds the Node.js workspaces.
+- **scripts/app-tear-down.sh**: Stops and removes the Docker containers and cleans up the data.
 
+## How to Run
+
+### Step 1: Clone the repository
 ```sh
-git clone <your-repo-url>
-cd <your-repo-directory>
+git clone https://github.com/talkersoft/distributed-task-scheduler
 ```
 
-### 2. Install Dependencies
-
-Navigate to the `init-db` directory and install the dependencies:
-
+### Step 2: Run the backend
+- note: app-run.sh executes re-yarn.sh which is required for step 3.
 ```sh
-cd init-db
-npm install
-cd ..
+cd distributed-task-scheduler
+./scripts/app-run.sh
 ```
 
-### 3. Create the Directory for PostgreSQL Data
-
+### Step 3: Run the frontend (open new terminal)
 ```sh
-mkdir -p ~/.docker/data/task-scheduler
+cd distributed-task-scheduler
+echo "REACT_APP_API_URL=http://localhost:5001/api" > frontend/task-scheduler-web/.env
+./scripts/re-yarn.sh
+cd frontend/task-scheduler-web
+yarn start
 ```
 
-### 4. Build and Start the Services Using Docker Compose
-
+### Step 4: Optional Storybook (open new terminal)
 ```sh
-docker-compose up -d
+cd distributed-task-scheduler
+./scripts/re-yarn.sh
+cd frontend/storybook
+yarn start
 ```
 
-### 5. Check the Logs to Ensure Initialization
 
+### Rebuild Node.js workspace
+- If needed, you can clean and reinstall all Node.js dependencies and rebuild the workspaces.
 ```sh
-docker-compose logs init-db
+./scripts/re-yarn-run.sh
+
+// deletes node_modules
+./scripts/re-yarn.sh --nuke
 ```
 
-### 6. Stop Services
-
+### Tear down app and clear persistant data
 ```sh
-docker-compose down
+// deletes data volume dir for postgres database
+./scripts/app-tear-down.sh 
 ```
 
-### Troubleshoot container
-```sh
-docker-compose down
-```
+
+## Notes
+- Make sure to navigate using cd to anywhere in the Git repository before running scripts.
+- For the `app-tear-down.sh` script, confirm the operation by typing 'yes' when prompted.
+
