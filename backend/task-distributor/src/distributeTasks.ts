@@ -1,5 +1,3 @@
-// Copyright Talkersoft LLC
-// /backend/task-distributor/src/distributor.ts
 import { AppDataSource } from 'task-entities';
 import { publishToRabbitMQ } from './publishToRabbitMQ';
 
@@ -12,7 +10,6 @@ async function distributeTasks(config: DistributorConfig) {
 
   try {
     await queryRunner.connect();
-    await queryRunner.startTransaction();
 
     const now = new Date();
     const nowUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
@@ -45,6 +42,8 @@ async function distributeTasks(config: DistributorConfig) {
       };
 
       try {
+        await queryRunner.startTransaction();
+        
         await queryRunner.query(
           `
           UPDATE task_schedule
@@ -56,9 +55,9 @@ async function distributeTasks(config: DistributorConfig) {
 
         await queryRunner.commitTransaction();
 
-        await queryRunner.startTransaction();
-
         await publishToRabbitMQ(JSON.stringify(payload));
+
+        await queryRunner.startTransaction();
 
         await queryRunner.query(
           `
@@ -69,8 +68,12 @@ async function distributeTasks(config: DistributorConfig) {
           [taskScheduleId]
         );
 
+        await queryRunner.commitTransaction();
+
       } catch (publishError) {
         console.error(`Failed to publish task ${taskScheduleId}`, publishError);
+
+        await queryRunner.startTransaction();
 
         await queryRunner.query(
           `
@@ -80,10 +83,11 @@ async function distributeTasks(config: DistributorConfig) {
           `,
           [taskScheduleId]
         );
-      }
 
-      await queryRunner.commitTransaction();
+        await queryRunner.commitTransaction();
+      }
     }
+
   } catch (err) {
     console.error('Error during transaction, rolling back...', err);
     await queryRunner.rollbackTransaction();
