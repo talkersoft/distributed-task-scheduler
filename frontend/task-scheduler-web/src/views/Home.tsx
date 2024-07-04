@@ -6,16 +6,14 @@ import logo from '../gazelle.svg';
 const Home = () => {
   return (
     <div>
-      <h1>Task Executor</h1>
-      <p>We execute stuff really fast.</p>
+      <h1>Distributed Task Scheduler</h1>
 
       <div>
         <img src={logo} className="gazelle-logo" alt="logo" />
       </div>
       
-      <i style={{ color: 'magenta' }}>
-        Please note, Monitor will not show data until recurring tasks are scheduled.
-      </i>
+      <i>We execute stuff really fast, like a gazelle.</i>
+    
     </div>
   );
 }

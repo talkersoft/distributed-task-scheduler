@@ -1,6 +1,6 @@
 // Copyright Talkersoft LLC
 // /frontend/storybook/src/stories/LineGraph/LineGraph.stories.ts
-// stories/LineGraph/LineGraph.stories.tsx
+
 import type { Meta, StoryObj } from '@storybook/react';
 import LineGraph from './LineGraph';
 
@@ -17,12 +17,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const mockData = [
-    { scheduled_time: '2024-06-29 00:00', required_instances: 5 },
-    { scheduled_time: '2024-06-29 01:00', required_instances: 7 },
-    { scheduled_time: '2024-06-29 02:00', required_instances: 3 },
-    { scheduled_time: '2024-06-29 03:00', required_instances: 5 },
-    { scheduled_time: '2024-06-29 23:00', required_instances: 8 },
-    { scheduled_time: '2024-06-29 23:59', required_instances: 6 },
+    { scheduled_time: '2024-06-29T00:00:00Z', required_instances: 5 },
+    { scheduled_time: '2024-06-29T01:00:00Z', required_instances: 7 },
+    { scheduled_time: '2024-06-29T02:00:00Z', required_instances: 3 },
+    { scheduled_time: '2024-06-29T03:00:00Z', required_instances: 5 },
+    { scheduled_time: '2024-06-29T23:00:00Z', required_instances: 8 },
+    { scheduled_time: '2024-06-29T23:59:00Z', required_instances: 6 },
 ];
 
 export const Default: Story = {

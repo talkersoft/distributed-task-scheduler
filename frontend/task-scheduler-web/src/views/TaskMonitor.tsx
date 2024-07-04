@@ -37,6 +37,14 @@ const TaskMonitor = () => {
         thresholdLabel="Available Instances" 
         thresholdValue={currentInstances} 
       />
+
+      <div>
+        <i style={{ color: 'magenta' }}>
+          Please note, Monitor will not show data until recurring tasks are scheduled, please allow schduler 60 seconds to pickup new recurring tasks.
+        </i>
+      </div>
+
+
     </div>
   );
 };
