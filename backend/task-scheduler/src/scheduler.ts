@@ -6,7 +6,7 @@ import moment, { Moment } from 'moment-timezone';
 
 async function scheduleTasks(config: { scheduleInterval: number }) {
     const queryRunner = AppDataSource.createQueryRunner();
-
+    
     try {
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -33,11 +33,18 @@ async function scheduleTasks(config: { scheduleInterval: number }) {
             }
 
             const taskCreatedInUTC: Moment = moment.utc(task.task_created);
-            const options: ParserOptions = { currentDate: now.toDate(), tz: 'UTC' };
+            const formattedBeginDate = moment().tz(task.time_zone).format('YYYY-MM-DD HH:mm:ss');
+            const options: ParserOptions = { 
+                currentDate: formattedBeginDate, 
+                tz: task.time_zone 
+            };
+
             const cronInterval = parseExpression(task.cron_expression, options);
+            let scheduledCount = 0;
 
             while (true) {
-                const nextScheduledRunInUTC = moment(cronInterval.next().toDate());
+                const nextInterval = cronInterval.next().toDate();
+                const nextScheduledRunInUTC = moment(nextInterval);
 
                 if (nextScheduledRunInUTC.isAfter(todayEndUTC)) {
                     break;
@@ -51,6 +58,12 @@ async function scheduleTasks(config: { scheduleInterval: number }) {
                     'INSERT INTO task_schedule (task_id, scheduled_time, status) VALUES ($1, $2, $3)',
                     [task.id, nextScheduledRunInUTC.toISOString(), ExecutionStatus.Scheduled]
                 );
+
+                scheduledCount++;
+            }
+
+            if (scheduledCount > 0) {
+                console.log(`Scheduled ${scheduledCount} tasks for ${task.name} for ${todayStartUTC.format('MM/DD/YYYY')}`);
             }
         }
 
