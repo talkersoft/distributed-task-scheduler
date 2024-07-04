@@ -1,11 +1,8 @@
-/* Copyright Talkersoft LLC */
-/* /frontend/task-scheduler-web/src/components/ListTasks.tsx */
-// src/components/ListTasks.tsx
 import React from 'react';
 import { Column, CellProps } from 'react-table';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { DataGrid } from 'storybook/src/stories/DataGrid/DataGrid';
-import './list-tasks.scss';
+import './task-list.scss';
 
 interface Task {
   id: string;
@@ -17,12 +14,13 @@ interface Task {
   time_zone: string;
 }
 
-interface ListTasksProps {
+interface TaskListProps {
   tasks: Task[];
   onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
 }
 
-const ListTasks: React.FC<ListTasksProps> = ({ tasks, onEdit }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
   const columns: Column<Task>[] = React.useMemo(
     () => [
       {
@@ -55,15 +53,21 @@ const ListTasks: React.FC<ListTasksProps> = ({ tasks, onEdit }) => {
         Header: 'Time Zone',
         accessor: 'time_zone',
       },
+      {
+        Header: 'Delete',
+        Cell: ({ row }: CellProps<Task>) => (
+          <TrashIcon className="delete-icon" onClick={() => onDelete(row.original)} />
+        ),
+      },
     ],
-    [onEdit]
+    [onEdit, onDelete]
   );
 
   return (
     <div className="list-tasks">
-      <DataGrid data={tasks} columns={columns} onEdit={onEdit} />
+      <DataGrid data={tasks} columns={columns} />
     </div>
   );
 };
 
-export default ListTasks;
+export default TaskList;

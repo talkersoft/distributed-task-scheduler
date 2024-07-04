@@ -74,6 +74,5 @@ export const Default: Story = {
   args: {
     data: mockData,
     columns: columns,
-    onEdit: (row) => console.log('Edit row', row),
   },
 };

@@ -1,6 +1,5 @@
 /* Copyright Talkersoft LLC */
 /* /frontend/task-scheduler-web/src/components/Content.tsx */
-// src/components/Content.tsx
 import React from 'react';
 import './content.scss';
 

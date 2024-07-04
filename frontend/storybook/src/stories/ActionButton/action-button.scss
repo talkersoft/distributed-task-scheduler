@@ -20,12 +20,22 @@
   &--primary {
     background-color: var(--color-neutral-700);
     color: var(--color-on-primary);
+
+    &:hover {
+      background-color: var(--color-high-contrast-purple-800);
+      color: var(--color-neutral-50);
+    }
   }
 
   &--secondary {
     background-color: var(--color-neutral-400);
     color: var(--color-on-surface);
     box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+
+    &:hover {
+      background-color: var(--color-high-contrast-magenta-800);
+      color: var(--color-neutral-50);
+    }
   }
 
   &--small {

@@ -1,6 +1,5 @@
 /* Copyright Talkersoft LLC */
 /* /frontend/task-scheduler-web/src/views/TaskSchedulerCreate.tsx */
-// src/views/TaskSchedulerCreate.tsx
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TaskForm from '../components/TaskForm';

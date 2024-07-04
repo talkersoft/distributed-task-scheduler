@@ -1,7 +1,4 @@
-// Copyright Talkersoft LLC
-// /frontend/task-scheduler-web/src/redux/taskSlice.ts
-// src/redux/taskSlice.ts
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Task {
   id: string;
@@ -70,10 +67,21 @@ export const editTask = createAsyncThunk('tasks/editTask', async (task: Task) =>
   return (await response.json()) as Task;
 });
 
+export const setTaskInactive = createAsyncThunk('tasks/setTaskInactive', async (taskId: string) => {
+  await fetch(`${process.env.REACT_APP_API_URL}/tasks/${taskId}/inactive`, {
+    method: 'PUT',
+  });
+  return taskId;
+});
+
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {},
+  reducers: {
+    removeTask(state, action: PayloadAction<string>) {
+      state.tasks = state.tasks.filter(task => task.id !== action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTasks.pending, (state) => {
@@ -117,8 +125,13 @@ const tasksSlice = createSlice({
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
+      })
+      .addCase(setTaskInactive.fulfilled, (state, action) => {
+        state.tasks = state.tasks.filter(task => task.id !== action.payload);
       });
   },
 });
+
+export const { removeTask } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

@@ -1,0 +1,21 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/task-scheduler-web/src/components/task-list.scss */
+@import '../dark-theme.scss';
+
+.task-list {
+  margin-top: 1rem;
+}
+
+.edit-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.delete-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+}

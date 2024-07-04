@@ -1,6 +1,5 @@
 // Copyright Talkersoft LLC
 // /frontend/task-scheduler-web/src/redux/taskTypeSlice.ts
-// src/redux/taskTypeSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 interface TaskType {

@@ -211,7 +211,11 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
 
         <div className="form-section task-form-buttons">
           <ActionButton label="Cancel" onClick={onCancel} primary={false} size="large" />
-          <ActionButton label="Save" onClick={handleSave} primary={true} size="large" />
+          <ActionButton 
+            label={selectedScheduleType === "Immediately" ? "Save/Run" : "Save"} 
+            onClick={handleSave} 
+            primary={true} 
+            size="large" />
         </div>
       </div>
     </div>

@@ -7,10 +7,9 @@ import './data-grid.scss';
 interface DataGridProps<T extends object> {
   data: T[];
   columns: Column<T>[];
-  onEdit: (row: T) => void;
 }
 
-export const DataGrid = <T extends object>({ data, columns, onEdit }: DataGridProps<T>) => {
+export const DataGrid = <T extends object>({ data, columns }: DataGridProps<T>) => {
   const tableInstance = useTable({ columns, data });
 
   const {
