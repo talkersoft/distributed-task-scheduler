@@ -30,6 +30,9 @@ export class TaskSchedule {
     @Column({ nullable: true })
     end_time?: Date;
 
+    @Column({ nullable: false })
+    schedule_created!: Date;
+
     @Column({
         type: "enum",
         enum: ExecutionStatus,

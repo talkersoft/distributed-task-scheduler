@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS task_schedule (
   start_time TIMESTAMP,
   end_time TIMESTAMP,
   status execution_status,
+  schedule_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   latency BIGINT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (start_time - scheduled_time)) * 1000) STORED,
   elapsed_execution_time BIGINT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (end_time - start_time)) * 1000) STORED,
   elapsed_time BIGINT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (end_time - scheduled_time)) * 1000) STORED
