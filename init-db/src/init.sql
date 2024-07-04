@@ -36,7 +36,7 @@ CREATE INDEX IF NOT EXISTS idx_tasks_scheduled_execution_time ON tasks(scheduled
 CREATE INDEX IF NOT EXISTS idx_tasks_task_type_id ON tasks(task_type_id);
 
 DO $$ BEGIN
-  CREATE TYPE execution_status AS ENUM ('Scheduled', 'Queued', 'Processing', 'Completed', 'Failed');
+  CREATE TYPE execution_status AS ENUM ('Scheduled', 'Queued', 'InFlight', 'Processing', 'Completed', 'Failed');
 EXCEPTION
   WHEN duplicate_object THEN null;
 END $$;

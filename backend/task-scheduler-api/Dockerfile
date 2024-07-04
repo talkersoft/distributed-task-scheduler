@@ -1,3 +1,5 @@
+# Copyright Talkersoft LLC
+# /backend/task-scheduler-api/Dockerfile
 FROM node:16
 
 WORKDIR /usr/src/app

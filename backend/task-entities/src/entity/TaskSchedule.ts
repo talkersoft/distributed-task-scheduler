@@ -6,6 +6,7 @@ import { Task } from "./Task";
 export enum ExecutionStatus {
     Scheduled = "Scheduled",
     Queued = "Queued",
+    InFlight = "InFlight",
     Processing = "Processing",
     Completed = "Completed",
     Failed = "Failed",

@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /frontend/task-scheduler-web/src/redux/taskSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Task {

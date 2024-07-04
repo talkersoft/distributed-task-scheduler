@@ -48,13 +48,26 @@ async function distributeTasks(config: DistributorConfig) {
         await queryRunner.query(
           `
           UPDATE task_schedule
-          SET status = 'Queued'
+          SET status = 'InFlight'
           WHERE id = $1
           `,
           [taskScheduleId]
         );
 
+        await queryRunner.commitTransaction();
+
+        await queryRunner.startTransaction();
+
         await publishToRabbitMQ(JSON.stringify(payload));
+
+        await queryRunner.query(
+          `
+          UPDATE task_schedule
+          SET status = 'Queued'
+          WHERE id = $1
+          `,
+          [taskScheduleId]
+        );
 
       } catch (publishError) {
         console.error(`Failed to publish task ${taskScheduleId}`, publishError);
@@ -68,9 +81,9 @@ async function distributeTasks(config: DistributorConfig) {
           [taskScheduleId]
         );
       }
-    }
 
-    await queryRunner.commitTransaction();
+      await queryRunner.commitTransaction();
+    }
   } catch (err) {
     console.error('Error during transaction, rolling back...', err);
     await queryRunner.rollbackTransaction();

@@ -2,7 +2,7 @@
 // /backend/task-distributor/src/initialize.ts
 import { AppDataSource } from 'task-entities';
 import { setupRabbitMQ } from './rabbitmq';
-import { distributeTasks, DistributorConfig } from './distributor';
+import { distributeTasks, DistributorConfig } from './distributeTasks';
 
 const RETRY_INTERVAL = 5000;
 const MAX_RETRIES = 10;

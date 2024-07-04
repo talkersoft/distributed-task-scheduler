@@ -1,3 +1,5 @@
+/* Copyright Talkersoft LLC */
+/* /frontend/task-scheduler-web/src/components/TaskList.tsx */
 import React from 'react';
 import { Column, CellProps } from 'react-table';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';

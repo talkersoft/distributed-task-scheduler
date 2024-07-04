@@ -1,3 +1,5 @@
+# Copyright Talkersoft LLC
+# /init-db/Dockerfile
 FROM node:16
 
 # Create and set the working directory
