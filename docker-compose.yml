@@ -71,7 +71,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=task_scheduler
-      - SCHEDULE_INTERVAL=15000
+      - SCHEDULE_INTERVAL=60000
     depends_on:
       - postgres
       - init-db

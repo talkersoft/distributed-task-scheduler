@@ -20,7 +20,7 @@ async function initializeScheduler(retries = 0) {
 
         setInterval(() => {
             scheduleTasks();
-        }, SCHEDULE_INTERVAL); // Use validated schedule interval
+        }, SCHEDULE_INTERVAL);
     } catch (err) {
         if (retries < MAX_RETRIES) {
             console.log(`Retrying database connection in ${RETRY_INTERVAL / 1000} seconds... (${retries + 1}/${MAX_RETRIES})`);

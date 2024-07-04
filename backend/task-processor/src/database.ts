@@ -7,17 +7,24 @@ const RETRY_INTERVAL = 5000;
 const MAX_RETRIES = 10;
 
 async function initializeDatabaseConnection() {
-  let retries = MAX_RETRIES;
-  while (retries) {
+  let retries = 0;
+  let connectionError: any = null;
+  
+  while (retries < MAX_RETRIES) {
     try {
       await AppDataSource.initialize();
       console.log('Database connection established');
-      break;
+      return;
     } catch (err) {
-      console.log(`Retrying database connection in ${RETRY_INTERVAL / 1000} seconds... (${retries + 1}/${MAX_RETRIES})`);
-      retries -= 1;
+      retries += 1;
+      connectionError = err;
+      console.log(`Retrying database connection in ${RETRY_INTERVAL / 1000} seconds... (${retries}/${MAX_RETRIES})`);
       await new Promise(res => setTimeout(res, RETRY_INTERVAL));
     }
+  }
+
+  if (retries === MAX_RETRIES) {
+    console.error('Error during Data Source initialization after maximum retries:', connectionError);
   }
 }
 
