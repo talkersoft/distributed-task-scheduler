@@ -49,7 +49,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
     return 'Immediately';
   };
 
-
   const [selectedScheduleType, setSelectedScheduleType] = useState(determineScheduleType(task));
 
   useEffect(() => {
@@ -89,9 +88,14 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskTypes, timeZones, onSave, onCan
       isValid = false;
     }
 
-    if (selectedScheduleType === 'Schedule' && !scheduledExecutionTime) {
-      setScheduledExecutionTimeError('Scheduled time is required');
-      isValid = false;
+    if (selectedScheduleType === 'Schedule') {
+      if (!scheduledExecutionTime) {
+        setScheduledExecutionTimeError('Scheduled time is required');
+        isValid = false;
+      } else if (scheduledExecutionTime <= new Date()) {
+        setScheduledExecutionTimeError('Scheduled time must be a future date');
+        isValid = false;
+      }
     }
 
     if (selectedScheduleType === 'Recurring' && !isValidCron(cronExpression, { alias: true })) {

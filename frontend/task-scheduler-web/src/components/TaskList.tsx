@@ -48,10 +48,6 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
         accessor: 'message',
       },
       {
-        Header: 'Next Run',
-        accessor: 'next_runtime',
-      },
-      {
         Header: 'Time Zone',
         accessor: 'time_zone',
       },

@@ -18,6 +18,7 @@ const TaskScheduler = () => {
   const taskStatus = useSelector((state: RootState) => state.tasks.status);
   const taskTypesStatus = useSelector((state: RootState) => state.taskTypes.status);
   const error = useSelector((state: RootState) => state.tasks.error);
+  const taskTypes = useSelector((state: RootState) => state.taskTypes.taskTypes);
   
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<any>(null);
@@ -26,10 +27,10 @@ const TaskScheduler = () => {
     if (tasks.length === 0 && taskStatus !== 'loading') {
       dispatch(fetchTasks());
     }
-    if (taskTypesStatus === 'idle') {
+    if (taskTypes.length === 0 && taskTypesStatus !== 'loading') {
       dispatch(fetchTaskTypes());
     }
-  }, [tasks, taskStatus, taskTypesStatus, dispatch]);
+  }, [tasks, taskStatus, taskTypes, taskTypesStatus, dispatch]);
 
   const handleEditTask = (task: any) => {
     navigate(`/task-scheduler/edit/${task.id}`);

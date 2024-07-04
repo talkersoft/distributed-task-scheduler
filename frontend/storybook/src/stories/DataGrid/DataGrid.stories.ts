@@ -61,10 +61,6 @@ const columns = [
     accessor: 'message',
   },
   {
-    Header: 'Next Runtime',
-    accessor: 'next_runtime',
-  },
-  {
     Header: 'Time Zone',
     accessor: 'time_zone',
   },

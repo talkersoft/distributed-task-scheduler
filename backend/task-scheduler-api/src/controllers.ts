@@ -22,17 +22,12 @@ interface TaskResponse {
     task_type_id: string;
     cron_expression: string | undefined;
     message: string | undefined;
-    next_runtime: string;
     time_zone: string;
     is_recurring: boolean;
     scheduled_execution_time: Date | undefined;
 }
 
 const formatTaskResponse = (task: Task): TaskResponse => {
-    const nextRuntime = task.scheduled_execution_time 
-        ? moment.tz(task.scheduled_execution_time, task.time_zone).format('MM-DD-yyyy hh:mm A')
-        : 'N/A';
-
     const taskDetails = task.task_details as TaskDetails;
 
     return {
@@ -42,7 +37,6 @@ const formatTaskResponse = (task: Task): TaskResponse => {
         task_type_id: task.taskType.id,
         cron_expression: task.cron_expression,
         message: taskDetails.message,
-        next_runtime: nextRuntime,
         time_zone: task.time_zone,
         is_recurring: task.is_recurring,
         scheduled_execution_time: task.scheduled_execution_time,

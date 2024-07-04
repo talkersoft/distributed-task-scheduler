@@ -48,8 +48,6 @@ const App = () => {
     <Router>
       <div className="App">
         <Header
-          onCreateAccount={() => {}}
-          onLogin={() => {}}
           onLogout={() => {}}
           user={{ name: 'User' }}
         />

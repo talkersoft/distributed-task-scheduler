@@ -1,6 +1,5 @@
-/* Copyright Talkersoft LLC */
-/* /frontend/storybook/src/stories/Header/header.scss */
 @import '../../../dark-theme.scss';
+
 .storybook-header {
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -10,25 +9,19 @@
   justify-content: space-between;
 }
 
-.storybook-header svg {
-  display: inline-block;
-  vertical-align: top;
-}
-
-.storybook-header h1 {
+.header-left {
   font-weight: 700;
   font-size: 20px;
   line-height: 1;
-  margin: 6px 0 6px 10px;
-  display: inline-block;
-  vertical-align: top;
+  margin: 6px 0;
 }
 
-.storybook-header button + button {
-  margin-left: 10px;
+.header-right {
+  display: flex;
+  align-items: center;
 }
 
-.storybook-header .welcome {
+.welcome {
   color: var(--color-on-surface);
   font-size: 14px;
   margin-right: 10px;
