@@ -50,6 +50,16 @@
   --color-on-error: var(--color-neutral-50);
   --color-on-background: var(--color-neutral-150);
   --color-on-surface: var(--color-neutral-900);
+
+
+  /* New variables based on the original SCSS colors */
+  --task-metrics-bg-color: #333;
+  --task-metrics-color: #ccc;
+  --task-metrics-header-color: #fff;
+  --task-metrics-border-color: #444;
+  --task-metrics-header-bg-color: #555;
+  --task-metrics-row-even-bg-color: #444;
+  --task-metrics-row-odd-bg-color: #333;
 }
 
 body {

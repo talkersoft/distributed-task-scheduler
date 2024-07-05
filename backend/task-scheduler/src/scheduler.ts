@@ -73,13 +73,13 @@ async function scheduleTask(task: Task, dayEndUTC: Moment) {
 async function scheduleTasks() {
     const now: Moment = moment().utc();
     const todayStartUTC: Moment = now.clone().startOf('day');
-    const todayEndUTC: Moment = now.clone().add(1, 'day').startOf('day');
+    const todayEndUTC: Moment = now.clone().endOf('day'); 
 
     await scheduleTasksForDay(todayStartUTC, todayEndUTC);
 
     if (now.hours() === 23 && now.minutes() === 59) {
-        const nextDayStartUTC: Moment = todayEndUTC;
-        const nextDayEndUTC: Moment = nextDayStartUTC.clone().add(1, 'day').startOf('day');
+        const nextDayStartUTC: Moment = todayEndUTC.clone().add(1, 'second');
+        const nextDayEndUTC: Moment = nextDayStartUTC.clone().endOf('day');
         await scheduleTasksForDay(nextDayStartUTC, nextDayEndUTC);
     }
 }

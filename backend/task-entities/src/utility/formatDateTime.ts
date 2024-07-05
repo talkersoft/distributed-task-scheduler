@@ -1,3 +1,5 @@
+// Copyright Talkersoft LLC
+// /backend/task-entities/src/utility/formatDateTime.ts
 export function formatDateTime(date: Date): string {
   return new Intl.DateTimeFormat('default', {
     year: 'numeric',

@@ -1,9 +1,11 @@
 /* Copyright Talkersoft LLC */
 /* /frontend/storybook/src/stories/DateTimeSelector/date-time-selector.scss */
+
 .date-time-picker-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative; /* Ensure the container is relative for proper error positioning */
 }
 
 .date-time-picker-label {
@@ -41,18 +43,18 @@
 }
 
 .react-datepicker-wrapper {
-  width: 100%; 
+  width: 100%;
 }
 
 .react-datepicker {
   z-index: 20;
-  font-size: 14px; 
-  border: 1px solid var(--color-neutral-600); 
-  background-color: var(--color-neutral-700); 
+  font-size: 14px;
+  border: 1px solid var(--color-neutral-600);
+  background-color: var(--color-neutral-700);
   color: var(--color-on-surface);
 
   .react-datepicker__header {
-    background-color: var(--color-neutral-600); 
+    background-color: var(--color-neutral-600);
     border-bottom: 1px solid var(--color-neutral-700);
   }
 
@@ -79,7 +81,7 @@
       background-color: var(--color-neutral-700);
       border-left: 1px solid var(--color-neutral-600);
     }
-    
+
     .react-datepicker__time-box {
       .react-datepicker__time-list-item {
         &:hover {
@@ -93,6 +95,5 @@
 .error-message {
   color: var(--color-error);
   font-size: 0.875rem;
-  position: absolute;
-  bottom: -1.5rem;
+  margin-top: 4px; /* Adjust margin to control spacing */
 }

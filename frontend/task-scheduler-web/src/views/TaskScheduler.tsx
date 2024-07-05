@@ -59,11 +59,13 @@ const TaskScheduler = () => {
   };
 
   return (
-    <>
+    <div className="task-scheduler">
+      <h1>Task Scheduler</h1>
+
       <div className="action-button-container">
         <ActionButton label="Create New Task" onClick={handleCreateTask} primary={true} size="large" />
       </div>
-      <div className="task-scheduler">
+      <div>
         {taskStatus === 'loading' && <div>Loading...</div>}
         {taskStatus === 'succeeded' && <TaskList tasks={tasks} onEdit={handleEditTask} onDelete={handleDeleteTask} />}
         {taskStatus === 'failed' && <div>{error}</div>}
@@ -80,7 +82,7 @@ const TaskScheduler = () => {
           <ActionButton label="No" onClick={cancelDeleteTask} />
         </div>
       </Modal>
-    </>
+    </div>
   );
 };
 
