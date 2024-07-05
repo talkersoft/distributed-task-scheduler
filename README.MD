@@ -37,7 +37,6 @@ git clone https://github.com/talkersoft/distributed-task-scheduler
 ```
 
 ### Step 2: Run the backend
-- Note: `app-run.sh` executes `re-yarn.sh` which is required for step 3.
 ```sh
 cd distributed-task-scheduler
 ./scripts/app-run.sh
@@ -83,4 +82,8 @@ SELECT * FROM task_schedule;
 
 ## Scaling Instructions
 1. Add more instances to Docker Compose.
-2. Update `"configuration" set value = 3 where key = 'number_of_instances'`.
+2. Update number_of_instances in configuration table.
+
+```sql
+Update `"configuration" set value = n where key = 'number_of_instances'`.
+```
