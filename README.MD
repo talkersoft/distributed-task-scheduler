@@ -21,12 +21,13 @@ This project sets up a task scheduler system using Docker and Docker Compose. It
 The `docker-compose.yml` file defines all the services and their configurations. The following sections describe each service and its environment variables.
 
 ## Volumes
-- **postgres_data**: Persistent storage for PostgreSQL data.
+- **postgres_data**: Persistent storage for PostgreSQL data. Configured for ~/.docker/data
 
 ## Scripts
 - **scripts/app-run.sh**: Builds and starts the Docker containers.
 - **scripts/re-yarn.sh**: Installs and builds the Node.js workspaces.
 - **scripts/app-tear-down.sh**: Stops and removes the Docker containers and cleans up the data.
+- **scripts/stay-awake.sh**: Keep your computer awake. (MAC only)
 
 ## How to Run
 
@@ -36,7 +37,7 @@ git clone https://github.com/talkersoft/distributed-task-scheduler
 ```
 
 ### Step 2: Run the backend
-- note: app-run.sh executes re-yarn.sh which is required for step 3.
+- Note: `app-run.sh` executes `re-yarn.sh` which is required for step 3.
 ```sh
 cd distributed-task-scheduler
 ./scripts/app-run.sh
@@ -59,7 +60,6 @@ cd frontend/storybook
 yarn start
 ```
 
-
 ### Rebuild Node.js workspace
 - If needed, you can clean and reinstall all Node.js dependencies and rebuild the workspaces.
 ```sh
@@ -75,8 +75,12 @@ yarn start
 ./scripts/app-tear-down.sh 
 ```
 
+## View Task Details
+```sql
+SELECT * FROM tasks;
+SELECT * FROM task_schedule;
+```
 
-## Notes
-- Make sure to navigate using cd to anywhere in the Git repository before running scripts.
-- For the `app-tear-down.sh` script, confirm the operation by typing 'yes' when prompted.
-
+## Scaling Instructions
+1. Add more instances to Docker Compose.
+2. Update `"configuration" set value = 3 where key = 'number_of_instances'`.
